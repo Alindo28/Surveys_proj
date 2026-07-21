@@ -37,12 +37,12 @@
   </div> --}}
   <div class="navbar-end flex gap-[15px] mr-[10px]">
     @auth
-        <a href="{{ route('login') }}" class="btn bg-purple-600 text-white hover:bg-purple-600/70">Log-out</a>
+        <a href="{{ route('show.login') }}" class="btn bg-purple-600 text-white hover:bg-purple-600/70">Log-out</a>
     @endauth
 
     @guest
-        <a href="{{ route('login') }}" class="btn bg-cyan-600 text-white hover:bg-cyan-600/70">Log-in</a>
-        <a href="{{ route('register') }}" class="btn">Register</a>
+        <a href="{{ route('show.login') }}" class="btn bg-cyan-600 text-white hover:bg-cyan-600/70">Log-in</a>
+        <a href="{{ route('show.register') }}" class="btn">Register</a>
     @endguest
 
   </div>
