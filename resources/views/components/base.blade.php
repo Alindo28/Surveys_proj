@@ -6,6 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Surveys</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if(isset($additionalResource))
+        @vite($additionalResource)
+    @endif
 </head>
 <body class="bg-gray-100 min-h-screen">
     @include('components.navigation')
