@@ -16,13 +16,18 @@ class SurveyFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
-        return [
-            'user_id' => User::factory(),
-            'title' => fake()->words(3, true),
-            'description' => fake()->realTextBetween(50,150),
-            'status' => fake()->randomElement(['draft', 'active', 'closed', 'archived'])
-        ];
-    }
+public function definition(): array
+{
+    return [
+        'user_id' => User::factory(),
+        'title' => fake()->sentence(3),
+        'description' => fake()->sentence(),
+        'status' => fake()->randomElement([
+            'draft',
+            'active',
+            'closed',
+            'archived'
+        ]),
+    ];
+}
 }

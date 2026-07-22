@@ -13,11 +13,11 @@
             </p>
 
             <div class="flex justify-center gap-4">
-                <a href="{{ route('show.survey_create') }}" class="btn btn-primary">
+                <a href="{{ route('survey.create.show') }}" class="btn btn-primary">
                     Create a Survey
                 </a>
 
-                <a href="{{ route('survey_home') }}" class="btn btn-outline">
+                <a href="{{ route('survey.home') }}" class="btn btn-outline">
                     Take a Survey
                 </a>
             </div>

@@ -16,10 +16,30 @@ class SurveyQuestionFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
-        return [
-            'survey_id' => Survey::factory(),
-        ];
-    }
+public function definition(): array
+{
+    $type = fake()->randomElement([
+        'text',
+        'choice'
+    ]);
+
+    return [
+        'survey_id' => Survey::factory(),
+        'question' => fake()->sentence(),
+        'type' => $type,
+
+        // Your database stores options as a string separated by |
+        'options' => $type === 'choice'
+            ? implode('|', fake()->randomElements([
+                'Option A',
+                'Option B',
+                'Option C',
+                'Option D'
+            ], 3))
+            : null,
+
+        'required' => fake()->boolean(),
+        'position' => fake()->numberBetween(0,10),
+    ];
+}
 }

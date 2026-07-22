@@ -27,7 +27,7 @@ class AuthController extends Controller
         $user = User::create($validated);
         Auth::login($user);
 
-        return redirect()->route('survey_home');
+        return redirect()->route('survey.home');
     }
 
     public function login(Request $req)
@@ -40,7 +40,7 @@ class AuthController extends Controller
         if (Auth::attempt($validated)) {
             $req->session()->regenerate();
 
-            return redirect()->route('survey_home');
+            return redirect()->route('survey.home');
         }
 
         throw ValidationException::withMessages([

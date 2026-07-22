@@ -18,7 +18,7 @@
         <li><a>Item 3</a></li>
       </ul> --}}
     </div>
-    <a href="{{ route('home') }}" class="btn btn-ghost text-xl">Surveys</a>
+    <a href="{{ auth()->check() ? route('survey.home') : route('home') }}" class="btn btn-ghost text-xl">Surveys</a>
   </div>
   {{-- <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">

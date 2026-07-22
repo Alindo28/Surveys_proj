@@ -29,4 +29,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function surveys()
+    {
+        return $this->hasMany(Survey::class);
+    }
 }

@@ -6,7 +6,7 @@
         </h1>
 
 
-        <form action="#" method="POST">
+        <form action="{{ route('survey.create') }}" method="POST">
 
             @csrf
 
@@ -61,4 +61,6 @@
         </form>
 
     </div>
+
+@include('components.errortext')
 </x-base>

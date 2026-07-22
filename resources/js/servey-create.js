@@ -36,7 +36,7 @@ let questionHtml = `
 
                         <select
                             id="type-selection-${cInd}"
-                            name="questions[0][type]"
+                            name="questions[${cInd}][type]"
                             class="select select-bordered mt-4 question-type"
                         >
                             <option value="text">

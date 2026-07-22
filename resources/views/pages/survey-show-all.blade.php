@@ -14,7 +14,7 @@
         </div>
 
             <div class="pl-[20vw]">
-                <a href="{{ route('show.survey_create') }}" class="btn btn-primary">
+                <a href="{{ route('survey.create.show') }}" class="btn btn-primary">
                     Create Survey
                 </a>
             </div>
@@ -39,7 +39,7 @@
                             </h2>
 
                             <div class="badge badge-primary">
-                                {{ ucfirst($survey->status) }}
+                                {{ $survey->status }}
                             </div>
 
                         </div>
@@ -52,9 +52,14 @@
 
                         <div class="mt-4 text-sm">
                             <p>
+                                Total questions:
+                                {{ $survey->questions->count() }}
+                            </p>
+
+                            <p>
                                 Created by:
                                 <span class="font-semibold">
-                                    {{ $survey->user->name }}
+                                    {{ $survey->user->full_name }}
                                 </span>
                             </p>
 
@@ -67,7 +72,7 @@
 
                         <div class="card-actions justify-end mt-4">
 
-                            <a
+                            <a href="{{ route('survey.view', [$survey->id]) }}"
                                 class="btn btn-primary"
                             >
                                 View Survey

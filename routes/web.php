@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(SurveyController::class)->group(function(){
     Route::get('/', 'index')->name('home');
-    Route::get('/survey', 'show')->name('survey_home');
+    Route::get('/survey', 'show')->name('survey.home');
 });
 
 
@@ -21,7 +21,10 @@ Route::middleware('guest')->controller(AuthController::class)->group(function(){
 
 Route::middleware('auth')->group(function(){
     Route::post('/auth/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/survey/create', [SurveyController::class, 'showCreate'])->name('show.survey_create');
+    Route::get('/survey/create', [SurveyController::class, 'showCreate'])->name('survey.create.show');
+    Route::post('/survey/create', [SurveyController::class, 'create'])->name('survey.create');
+    Route::get('/survey/{id}', [SurveyController::class, 'view'])->name('survey.view');
+
 });
 
 
