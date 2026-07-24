@@ -1,4 +1,4 @@
-import { newQuestion } from "./utils";
+import { newQuestion } from "./servey-utils";
 
 let addQBut = document.getElementById('add-question');
 

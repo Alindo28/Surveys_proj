@@ -115,7 +115,7 @@ let questionHtml = `
                         </div>
 
                         <!-- field -->
-                        <div id="field-${cInd}" ${question!=null && question['type'] === 'choice' ? 'hidden' : ''} class="options mt-4">
+                        <div id="field-${cInd}" class="options mt-4">
 
                             <h3 class="font-bold">
                                 Answer
@@ -129,7 +129,7 @@ let questionHtml = `
                         </div>
 
                         <!-- Options -->
-                        <div id="options-${cInd}" class="options ${question!=null && question['type'] === 'text' ? 'hidden' : ''} mt-4">
+                        <div id="options-${cInd}" class="options hidden mt-4">
 
                             <h3 class="font-bold">
                                 Options

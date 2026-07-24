@@ -6,9 +6,10 @@
             Edit Survey
         </h1>
 
-        <form action="" method="POST">
+        <form action="{{ route('survey.edit', ['id' => $survey->id]) }}" method="POST">
 
             @csrf
+            @method('PUT')
 
             <!-- Survey Information -->
             <div class="card bg-base-200 shadow-xl mb-8">
@@ -61,7 +62,7 @@
 
 
             <button class="btn btn-primary w-full">
-                Create Survey
+                Save Survey
             </button>
 
 

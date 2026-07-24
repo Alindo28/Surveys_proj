@@ -58,77 +58,6 @@
                                     {{ $survey->title }}
                                 </h2>
 
-                                <div class="dropdown dropdown-end">
-
-                                    <button tabindex="0" class="btn btn-sm
-                                        @if($survey->status === 'active')
-                                            btn-success
-                                        @elseif($survey->status === 'closed')
-                                            btn-error bg-red-300 border-red-300
-                                        @elseif($survey->status === 'archived')
-                                            btn-neutral
-                                        @else
-                                            btn-warning
-                                        @endif
-                                    ">
-                                        {{ ucfirst($survey->status) }}
-
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                        </svg>
-
-                                    </button>
-
-
-                                    <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40">
-
-                                        <li>
-                                            <form action="{{ route('survey.edit.status', ['id' => $survey->id]) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-
-                                                <button type="submit" name="status" value="draft">
-                                                    Draft
-                                                </button>
-                                            </form>
-                                        </li>
-
-                                        <li>
-                                            <form action="{{ route('survey.edit.status', ['id' => $survey->id]) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-
-                                                <button type="submit" name="status" value="active">
-                                                    Active
-                                                </button>
-                                            </form>
-                                        </li>
-
-                                        <li>
-                                            <form action="{{ route('survey.edit.status', ['id' => $survey->id]) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-
-                                                <button type="submit" name="status" value="closed">
-                                                    Closed
-                                                </button>
-                                            </form>
-                                        </li>
-
-                                        <li>
-                                            <form action="{{ route('survey.edit.status', ['id' => $survey->id]) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-
-                                                <button type="submit" name="status" value="archived">
-                                                    Archived
-                                                </button>
-                                            </form>
-                                        </li>
-
-                                    </ul>
-
-                                </div>
 
                             </div>
 
@@ -148,8 +77,43 @@
                                 <span>{{ $survey->responses_count ?? 0 }}</span>
                             </div>
 
-                            <div class="card-actions justify-end mt-6">
+                            <div class="card-actions justify-between items-center">
+                                <form action="{{ route('survey.edit.status', ['id' => $survey->id]) }}" method="POST" class="flex justify-center items-center">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div class="join">
+                                        <div>
+                                            <label class="input join-item">
+                                        <select
+                                            id="type-selection-${cInd}"
+                                            name="status"
+                                            class="select border-l-0 border-r-0 rounded-none question-type cursor-pointer"
+                                        >
+                                            <option {{ $survey->status === 'draft' ? 'selected' : ''}} value="draft">
+                                                Draft
+                                            </option>
 
+                                            <option {{ $survey->status === 'active' ? 'selected' : ''}} value="active">
+                                                Active
+                                            </option>
+
+                                            <option {{ $survey->status === 'closed' ? 'selected' : ''}} value="closed">
+                                                Closed
+                                            </option>
+
+                                            <option {{ $survey->status === 'archived' ? 'selected' : ''}} value="archived">
+                                                Archived
+                                            </option>
+                                        </select>
+                                            </label>
+                                            <div class="validator-hint hidden">Enter valid email address</div>
+                                        </div>
+                                        <button class="btn btn-soft btn-neutral join-item">Save</button>
+                                        </div>
+
+                                </form>
+
+                                <div class="flex gap-2">
                                 <a href={{ route('survey.view',['id'=>$survey->id]) }} class="btn btn-sm btn-outline">
                                     View
                                 </a>
@@ -158,11 +122,20 @@
                                     Edit
                                 </a>
 
-                                <button class="btn btn-sm bg-red-600 text-red-100">
-                                    Delete
-                                </button>
+                                <form action="{{ route('survey.delete', ['id' => $survey->id]) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button class="btn btn-sm bg-red-600 text-red-100">
+                                        Delete
+                                    </button>
+                                </form>
+                                </div>
+
+
 
                             </div>
+
 
                         </div>
 
@@ -177,5 +150,5 @@
     </div>
 
 </div>
-
+@include('components.errortext')
 </x-base>

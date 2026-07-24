@@ -39,7 +39,7 @@ class SurveyController extends Controller
         $validated = $req->validate(
             [
                 'title' => ['string','required','max:255'],
-                'description' => ['string','max:255'],
+                'description' => ['string','max:255','nullable'],
                 'questions' => ['array','required','min:1'],
                 'questions.*.question' => ['string','required','max:255'],
                 'questions.*.type' => ['required','in:text,choice'],
@@ -49,7 +49,9 @@ class SurveyController extends Controller
             ]
         );
         foreach ($validated['questions'] as &$question) {
-            $question['required'] ?? $question['required'] = false;
+            if (!isset($question['required'])) {
+                    $question['required'] = false;
+                }
         }
 
         foreach($validated['questions'] as &$question){
@@ -80,17 +82,71 @@ class SurveyController extends Controller
         return view('pages.survey-show-my-all', ['surveys' => $surveys]);
     }
 
-    public function changeStatus(Request $req){
-        dd($req->all());
+    public function changeStatus(Request $req, $id){
         $validated = $req->validate([
-            'status' => ['in_array:[draft, active, closed, archived]']
+            'status' => ['in:draft,active,closed,archived']
         ]);
 
-        // $survey = Survey::find();
+        $survey = Survey::find($id)->update([
+            'status' => $validated['status']
+        ]);
+
+        return redirect()->route('survey.view.my');
     }
 
     public function showEdit($id){
         $survey = Survey::find($id);
         return view('pages.survey-edit', ['survey' => $survey]);
+    }
+
+    public function update(Request $req, $id){
+        $validated = $req->validate(
+            [
+                'title' => ['string','required','max:255'],
+                'description' => ['string','max:255','nullable'],
+                'questions' => ['array','required','min:1'],
+                'questions.*.question' => ['string','required','max:255'],
+                'questions.*.type' => ['required','in:text,choice'],
+                'questions.*.required' => ['sometimes'],
+                'questions.*.options' => ['nullable', 'array', 'min:1'],
+                'questions.*.options.*' => ['string', 'required', 'max:255']
+            ]
+        );
+        foreach ($validated['questions'] as &$question) {
+            if (!isset($question['required'])) {
+                $question['required'] = false;
+            }
+        }
+
+        foreach($validated['questions'] as &$question){
+            if(isset($question['options'])){
+                $question['options'] = Arr::join($question['options'],'|');
+            }
+        }
+
+        $validated['user_id'] = Auth::user()->id;
+
+        $survey = Survey::find($id);
+
+        $survey->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+        ]);
+
+        SurveyQuestion::where(['survey_id' => $survey->id])->delete();
+
+        foreach($validated['questions'] as &$question){
+            $question['survey_id'] = $survey->id;
+            SurveyQuestion::create($question);
+        }
+
+
+        return redirect()->route('survey.view.my');
+    }
+
+    public function delete($id){
+        Survey::find($id)->delete();
+
+        return redirect()->route('survey.view.my');
     }
 }

@@ -1,4 +1,4 @@
-import { newQuestion } from "./utils";
+import { newQuestion } from "./servey-utils";
 
 let questionsDiv = document.getElementById('questions');
 
