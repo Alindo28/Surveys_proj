@@ -72,7 +72,25 @@ class SurveyController extends Controller
         }
 
 
-        return redirect()->route('survey.home');
+        return redirect()->route('survey.view.my');
     }
 
+    public function viewMy(){
+        $surveys = Survey::where('user_id','=',auth()->id())->get();
+        return view('pages.survey-show-my-all', ['surveys' => $surveys]);
+    }
+
+    public function changeStatus(Request $req){
+        dd($req->all());
+        $validated = $req->validate([
+            'status' => ['in_array:[draft, active, closed, archived]']
+        ]);
+
+        // $survey = Survey::find();
+    }
+
+    public function showEdit($id){
+        $survey = Survey::find($id);
+        return view('pages.survey-edit', ['survey' => $survey]);
+    }
 }

@@ -23,8 +23,12 @@ Route::middleware('auth')->group(function(){
     Route::post('/auth/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/survey/create', [SurveyController::class, 'showCreate'])->name('survey.create.show');
     Route::post('/survey/create', [SurveyController::class, 'create'])->name('survey.create');
-    Route::get('/survey/{id}', [SurveyController::class, 'view'])->name('survey.view');
+    Route::get('/survey/id/{id}', [SurveyController::class, 'view'])->name('survey.view');
+    Route::get('/survey/my', [SurveyController::class, 'viewMy'])->name('survey.view.my');
 
+    Route::patch('/survey/my/{id}', [SurveyController::class, 'changeStatus'])->name('survey.edit.status');
+    Route::put('/survey/my/{id}', [SurveyController::class, 'edit'])->name('survey.edit');
+    Route::get('/survey/my/{id}', [SurveyController::class, 'showEdit'])->name('survey.edit.show');
 });
 
 

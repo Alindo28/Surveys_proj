@@ -37,6 +37,15 @@
   </div> --}}
   <div class="navbar-end flex gap-[15px] mr-[10px]">
     @auth
+
+        @if(Route::currentRouteName() == 'survey.view.my')
+            <a href="{{ route('survey.home') }}" class="btn">All Surveys</a>
+        @else
+            <a href="{{ route('survey.view.my') }}" class="btn">My Surveys</a>
+
+
+        @endif
+
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button class="btn bg-purple-600 text-white hover:bg-purple-600/70">Log-out</button>
