@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Response;
 use App\Models\Survey;
 use App\Models\SurveyQuestion;
 use App\Models\User;
@@ -26,5 +27,7 @@ class DatabaseSeeder extends Seeder
                     )
             )
             ->create();
+
+        Response::factory(25)->create();
     }
 }

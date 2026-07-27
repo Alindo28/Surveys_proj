@@ -22,7 +22,7 @@
                 </p>
 
 
-                <form class="mt-8 space-y-8">
+                <form action="{{ route('response.create', ['id'=>$survey->id]) }}" method="POST" class="mt-8 space-y-8">
 
 
                     <!-- Questions -->
@@ -34,6 +34,7 @@
                                 </label>
 
                                 <textarea
+                                    name="answers[{{ $surveyQuestion['id'] }}]"
                                     class="textarea textarea-bordered w-full mt-3"
                                     placeholder="Write your answer"
                                 ></textarea>
@@ -50,9 +51,11 @@
                                     @foreach (explode('|',$surveyQuestion['options']) as $option)
                                         <label class="flex gap-2 items-center">
                                             <input
+                                                required
                                                 type="radio"
-                                                name="q2"
+                                                name="answers[{{ $surveyQuestion['id'] }}]"
                                                 class="radio"
+                                                value="{{ $option }}"
                                             >
                                             {{ $option }}
                                         </label>
@@ -65,8 +68,11 @@
 
 
 
-                    <button class="btn btn-primary w-full">
-                        Submit Survey
+                    <button {{ $survey->user_id == auth()->id() || $survey->alreadyResponded()
+                     ? 'disabled' : '' }} class="btn btn-primary w-full">
+
+                    {{ $survey->alreadyResponded() ? 'Already Responded' : 'Submit Survey'}}
+
                     </button>
 
 

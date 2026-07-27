@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/survey/my/{id}', [SurveyController::class, 'showEdit'])->name('survey.edit.show');
     Route::delete('/survey/my/{id}', [SurveyController::class, 'delete'])->name('survey.delete');
 
+    Route::post('/survey/response/{id}', [ResponseController::class, 'create'])->name('response.create');
 });
 
 

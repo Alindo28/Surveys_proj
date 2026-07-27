@@ -38,6 +38,8 @@
   <div class="navbar-end flex gap-[15px] mr-[10px]">
     @auth
 
+        <p>{{ auth()->user()->full_name }}</p>
+
         @if(Route::currentRouteName() == 'survey.view.my')
             <a href="{{ route('survey.home') }}" class="btn">All Surveys</a>
         @else

@@ -20,4 +20,18 @@ class Survey extends Model
     {
         return $this->hasMany(SurveyQuestion::class);
     }
+
+    public function responses(){
+        return $this->hasMany(Response::class);
+    }
+
+    public function alreadyResponded():bool{
+        if(Response::where('survey_id',$this->id)->where('user_id', auth()->id())->exists())return true;
+        return false;
+    }
+    public static function alreadyRespondedStatic(int $survey_id):bool{
+        if(Response::where('survey_id',$survey_id)->where('user_id', auth()->id())->exists())return true;
+        return false;
+    }
+
 }
