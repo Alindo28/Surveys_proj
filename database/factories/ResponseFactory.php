@@ -33,9 +33,10 @@ class ResponseFactory extends Factory
         }
 
         return [
-            'user_id' => User::factory(),
+            'user_id' => User::inRandomOrder()->first()->id,
             'survey_id' => $survey->id,
-            'answers' => implode('|',$answers)
+            'answers' => implode('|',$answers),
+            'duration' => fake()->numberBetween(30,300)
         ];
     }
 }

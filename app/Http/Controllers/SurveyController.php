@@ -25,6 +25,10 @@ class SurveyController extends Controller
         $survey = Survey::find($id);
         $surveyQuestions = SurveyQuestion::where('survey_id', '=', $survey->id)->get();
 
+        session([
+            'start_time' => now()->toISOString()
+        ]);
+
         return view('pages.survey-show', [
             'survey' => $survey,
             'surveyQuestions' => $surveyQuestions

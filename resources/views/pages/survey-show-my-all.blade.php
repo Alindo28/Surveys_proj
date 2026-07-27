@@ -74,46 +74,54 @@
 
                             <div class="flex justify-between text-sm">
                                 <span>Total Responses: </span>
-                                <span>{{ $survey->responses_count ?? 0 }}</span>
+                                <span>{{ $survey->responses->count() ?? 0 }}</span>
                             </div>
 
-                            <div class="card-actions justify-between items-center">
-                                <form action="{{ route('survey.edit.status', ['id' => $survey->id]) }}" method="POST" class="flex justify-center items-center">
+                            <div class="card-actions flex flex-col justify-between items-center">
+                                <div class="flex gap-3">
+                                    <form action="{{ route('survey.edit.status', ['id' => $survey->id]) }}" method="POST" class="flex flex-1 justify-center items-center">
                                         @csrf
                                         @method('PATCH')
                                         <div class="join">
                                         <div>
-                                            <label class="input join-item">
+                                            <label class="input join-item max-w-20 py-3">
                                         <select
                                             id="type-selection-${cInd}"
                                             name="status"
-                                            class="select border-l-0 border-r-0 rounded-none question-type cursor-pointer"
+                                            class="select border-l-0 border-r-0 rounded-none question-type cursor-pointer bg-none align-left p-0"
                                         >
-                                            <option {{ $survey->status === 'draft' ? 'selected' : ''}} value="draft">
+                                            <option class="text-left" {{ $survey->status === 'draft' ? 'selected' : ''}} value="draft">
                                                 Draft
                                             </option>
 
-                                            <option {{ $survey->status === 'active' ? 'selected' : ''}} value="active">
+                                            <option class="text-left" {{ $survey->status === 'active' ? 'selected' : ''}} value="active">
                                                 Active
                                             </option>
 
-                                            <option {{ $survey->status === 'closed' ? 'selected' : ''}} value="closed">
+                                            <option class="text-left" {{ $survey->status === 'closed' ? 'selected' : ''}} value="closed">
                                                 Closed
                                             </option>
 
-                                            <option {{ $survey->status === 'archived' ? 'selected' : ''}} value="archived">
+                                            <option class="text-left" {{ $survey->status === 'archived' ? 'selected' : ''}} value="archived">
                                                 Archived
                                             </option>
                                         </select>
                                             </label>
                                             <div class="validator-hint hidden">Enter valid email address</div>
                                         </div>
-                                        <button class="btn btn-soft btn-neutral join-item">Save</button>
+                                        <button class="max-w-15 btn btn-soft btn-neutral join-item">Save</button>
                                         </div>
 
-                                </form>
+                                    </form>
 
-                                <div class="flex gap-2">
+                                    <a href="{{ route('response.view', ['id'=>$survey->id]) }}">
+                                    <button class="btn btn-warning flex-1">
+                                        Responses
+                                    </button> </a>
+                                </div>
+
+
+                                <div class="flex max-w-40 gap-5 justify-center">
                                 <a href={{ route('survey.view',['id'=>$survey->id]) }} class="btn btn-sm btn-outline">
                                     View
                                 </a>

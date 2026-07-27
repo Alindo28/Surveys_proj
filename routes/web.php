@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function(){
     Route::delete('/survey/my/{id}', [SurveyController::class, 'delete'])->name('survey.delete');
 
     Route::post('/survey/response/{id}', [ResponseController::class, 'create'])->name('response.create');
+    Route::get('/survey/response/{id}', [ResponseController::class, 'view'])->name('response.view');
+    Route::get('/survey/response/analysis/{id}', [ResponseController::class, 'analysis'])->name('response.analysis');
 });
 
 

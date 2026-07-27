@@ -71,12 +71,21 @@
                     <button {{ $survey->user_id == auth()->id() || $survey->alreadyResponded()
                      ? 'disabled' : '' }} class="btn btn-primary w-full">
 
-                    {{ $survey->alreadyResponded() ? 'Already Responded' : 'Submit Survey'}}
+                    {{ $survey->alreadyResponded() ?
+                    'Already Responded'
+                    :'Submit Survey'}}
 
                     </button>
-
-
                 </form>
+
+                    @if ($survey->alreadyResponded())
+                        <a href="{{ route('response.analysis',['id'=>$survey->id]) }}">
+                            <button class="btn btn-info">
+                                Analysis
+                            </button></a>
+
+
+                    @endif
 
             </div>
 

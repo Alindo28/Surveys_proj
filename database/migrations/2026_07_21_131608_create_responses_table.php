@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('survey_id')->constrained('surveys')->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('answers');
+            $table->integer('duration');
             $table->timestamps();
         });
     }

@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)
+        User::factory(20)
             ->has(
                 Survey::factory(5)
                     ->has(
@@ -28,6 +28,6 @@ class DatabaseSeeder extends Seeder
             )
             ->create();
 
-        Response::factory(25)->create();
+        Response::factory(500)->create();
     }
 }

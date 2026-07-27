@@ -70,13 +70,17 @@
                         </div>
 
 
-                        <div class="card-actions justify-end mt-4">
+                        <div class="card-actions flex flex-col justify-end mt-4">
 
                             <a href="{{ route('survey.view', [$survey->id]) }}"
                                 class="btn btn-primary"
                             >
                                 View Survey
                             </a>
+
+                            @if ($survey->alreadyResponded())
+                                <p class="text-[12px] text-accent">Completed</p>
+                            @endif
 
                         </div>
 
