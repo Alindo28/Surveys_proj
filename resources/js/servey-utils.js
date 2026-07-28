@@ -56,8 +56,6 @@ function addOption(data , val='option'){
 
 export function newQuestion(question = null){
 
-    console.log('dpmmpdwk')
-
 let cInd = getInd();
 let questionHtml = `
                     <div class="card-body">
@@ -100,6 +98,14 @@ let questionHtml = `
                             <option ${question!=null && question['type'] === 'choice' ? 'selected' : ''} value="choice">
                                 Multiple Choice
                             </option>
+
+                            <option ${question!=null && question['type'] === 'select' ? 'selected' : ''} value="select">
+                                Selection
+                            </option>
+
+                            <option ${question!=null && question['type'] === 'slider' ? 'selected' : ''} value="slider">
+                                Slider
+                            </option>
                         </select>
 
 
@@ -112,6 +118,15 @@ let questionHtml = `
                             >
 
                             <span>Required</span>
+
+                            <input
+                                type="checkbox"
+                                name="questions[${cInd}][private]"
+                                class="checkbox"
+                                ${question!=null && question['private'] ? 'checked' : ''}
+                            >
+
+                            <span>Private</span>
                         </div>
 
                         <!-- field -->
@@ -124,22 +139,21 @@ let questionHtml = `
                             <textarea
                                 readonly
                                 class="input text-center input-bordered w-full pt-2 pb-4 min-h-[20px] resize-none"
-                            >User Answer</textarea>
+                            >Answer</textarea>
 
                         </div>
 
                         <!-- Options -->
-                        <div id="options-${cInd}" class="options hidden mt-4">
+                        <div id="options-${cInd}" class="hidden mt-4">
 
                             <h3 class="font-bold">
-                                Options
+                                Choice Options
                             </h3>
 
 
                             <div id="option-list-${cInd}" class="option-list">
 
                             </div>
-
 
                             <button
                                 id="add-options-${cInd}"
@@ -149,6 +163,48 @@ let questionHtml = `
                                 Add Option
                             </button>
 
+                        </div>
+
+                        <!-- Slider -->
+                        <div id="slider-${cInd}" class="options hidden mt-4">
+                        <h3 class="font-bold">
+                            Slider Range
+                        </h3>
+                        <div class="flex justify-center items-center">
+
+                            <div class="flex items-center gap-1">
+                            <label>Left: </label>
+                            <input
+                            name="questions[${cInd}][range][]"
+                            type="number"
+                            class="input validator"
+                            required
+                            placeholder="Starting number"
+                            min="0"
+                            max="1000"
+                            value=1
+                            />
+                            <p class="validator-hint">Must be between be 0 to 1000</p>
+                            </div>
+
+                            <div class="flex items-center gap-1">
+                            <label>Right: </label>
+                            <input
+                            name="questions[${cInd}][range][]"
+                            type="number"
+                            class="input validator"
+                            required
+                            placeholder="Ending number"
+                            min="0"
+                            max="1000"
+                            value=10
+                            />
+                            <p class="validator-hint">Must be between be 0 to 1000</p>
+                            </div>
+
+                        </div>
+
+                        </div>
                         </div>
 
 
@@ -166,8 +222,23 @@ document.getElementById(`remove-${cInd}`).addEventListener('click', ()=>{
 })
 
 document.getElementById(`type-selection-${cInd}`).addEventListener('change', (e)=>{
-    document.getElementById(`field-${cInd}`).classList.toggle('hidden');
-    document.getElementById(`options-${cInd}`).classList.toggle('hidden');
+    if(e.target.value == 'text'){
+        document.getElementById(`field-${cInd}`).classList.remove('hidden');
+        document.getElementById(`options-${cInd}`).classList.add('hidden');
+        document.getElementById(`slider-${cInd}`).classList.add('hidden');
+    }
+    if(e.target.value == 'choice' || e.target.value == 'select'){
+        document.getElementById(`field-${cInd}`).classList.add('hidden');
+        document.getElementById(`options-${cInd}`).classList.remove('hidden');
+        document.getElementById(`slider-${cInd}`).classList.add('hidden');
+    }
+    if(e.target.value == 'slider'){
+        document.getElementById(`field-${cInd}`).classList.add('hidden');
+        document.getElementById(`options-${cInd}`).classList.add('hidden');
+        document.getElementById(`slider-${cInd}`).classList.remove('hidden');
+    }
+
+
 })
 
 let optionsData = {

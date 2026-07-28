@@ -20,7 +20,9 @@ public function definition(): array
 {
     $type = fake()->randomElement([
         'text',
-        'choice'
+        'choice',
+        'select',
+        'slider'
     ]);
 
     return [
@@ -29,17 +31,22 @@ public function definition(): array
         'type' => $type,
 
         // Your database stores options as a string separated by |
-        'options' => $type === 'choice'
-            ? implode('|', fake()->randomElements([
+        'options' => match ($type) {
+            'choice', 'select' => implode('|', fake()->randomElements([
                 'Option A',
                 'Option B',
                 'Option C',
-                'Option D'
-            ], 3))
-            : null,
+                'Option D',
+                'Option E',
+                'Option F',
+            ], random_int(3, 6))),
+            'slider' => '0|10',
+            default => null,
+        },
+
 
         'required' => fake()->boolean(),
-        'position' => fake()->numberBetween(0,10),
+        'private' => fake()->boolean(),
     ];
 }
 }

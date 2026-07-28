@@ -24,34 +24,46 @@
 
                 <form action="{{ route('response.create', ['id'=>$survey->id]) }}" method="POST" class="mt-8 space-y-8">
 
-
                     <!-- Questions -->
                     @foreach ($surveyQuestions as $surveyQuestion)
                         @if ($surveyQuestion['type'] == 'text')
                             <div>
+                                <div class="flex justify-between items-center gap-1">
                                 <label class="font-bold text-lg">
                                     {{ $surveyQuestion['question'] }}
                                 </label>
+                                @if ($surveyQuestion['required'])
+                                    <p class="text-[12px] text-gray-600">(required)</p>
+                                @endif
+
+                                </div>
 
                                 <textarea
+                                    {{ $surveyQuestion['required'] ? 'required' : '' }}
                                     name="answers[{{ $surveyQuestion['id'] }}]"
                                     class="textarea textarea-bordered w-full mt-3"
                                     placeholder="Write your answer"
                                 ></textarea>
                             </div>
 
-                        @else
+                        @elseif ($surveyQuestion['type'] == 'choice')
 
                             <div>
+                                <div class="flex justify-between items-center gap-1">
                                 <label class="font-bold text-lg">
                                     {{ $surveyQuestion['question'] }}
                                 </label>
+                                @if ($surveyQuestion['required'])
+                                    <p class="text-[12px] text-gray-600">(required)</p>
+                                @endif
+
+                                </div>
 
                                 <div class="mt-3 space-y-2">
                                     @foreach (explode('|',$surveyQuestion['options']) as $option)
                                         <label class="flex gap-2 items-center">
                                             <input
-                                                required
+                                                {{ $surveyQuestion['required'] ? 'required' : '' }}
                                                 type="radio"
                                                 name="answers[{{ $surveyQuestion['id'] }}]"
                                                 class="radio"
@@ -63,6 +75,72 @@
                                 </div>
                             </div>
 
+                        @elseif($surveyQuestion['type'] == 'select')
+                            <div>
+                                <div class="flex justify-between items-center gap-1">
+                                <label class="font-bold text-lg">
+                                    {{ $surveyQuestion['question'] }}
+                                </label>
+                                @if ($surveyQuestion['required'])
+                                    <p class="text-[12px] text-gray-600">(required)</p>
+                                @endif
+
+                                </div>
+
+                                <div class="mt-3 space-y-2">
+                                    @foreach (explode('|',$surveyQuestion['options']) as $option)
+                                        <label class="flex gap-2 items-center">
+                                            <input
+                                                {{ $surveyQuestion['required'] ? 'required' : '' }}
+                                                type="checkbox"
+                                                name="answers[{{ $surveyQuestion['id'] }}]"
+                                                class="checkbox"
+                                                value="{{ $option }}"
+                                            >
+                                            {{ $option }}
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            @elseif($surveyQuestion['type'] == 'slider')
+                            @php
+                                [$min, $max] = explode('|', $surveyQuestion['options']);
+                            @endphp
+
+                            <div>
+                                <div class="flex items-center gap-1 mb-2">
+                                    <label class="font-bold text-lg">
+                                        {{ $surveyQuestion['question'] }}
+                                    </label>
+
+                                    @if ($surveyQuestion['required'])
+                                        <span class="text-xs text-gray-500">(required)</span>
+                                    @endif
+                                </div>
+
+                                <div class="flex items-center gap-4">
+                                    <span>{{ $min }}</span>
+
+                                    <input
+                                        id="slider-{{ $surveyQuestion->id }}"
+                                        type="range"
+                                        name="answers[{{ $surveyQuestion->id }}]"
+                                        min="{{ $min }}"
+                                        max="{{ $max }}"
+                                        value="{{ $min }}"
+                                        class="range range-primary flex-1"
+                                        oninput="document.getElementById('slider-value-{{ $surveyQuestion->id }}').textContent = this.value"
+                                    >
+
+                                    <span>{{ $max }}</span>
+                                </div>
+
+                                <p class="mt-2 text-center font-semibold">
+                                    Value:
+                                    <span id="slider-value-{{ $surveyQuestion->id }}">{{ $min }}</span>
+                                </p>
+                            </div>
                         @endif
                     @endforeach
 
@@ -94,4 +172,6 @@
     </div>
 
 </div>
+
+@include('components.errortext')
 </x-base>

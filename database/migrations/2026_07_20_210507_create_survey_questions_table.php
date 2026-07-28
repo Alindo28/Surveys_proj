@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('survey_id')->constrained('surveys')->cascadeOnDelete();
             $table->string('question');
-            $table->enum('type', ['text', 'choice']);
+            $table->enum('type', ['text', 'choice', 'select', 'slider']);
             $table->string('options')->nullable();
             $table->boolean('required')->default(false);
-            $table->integer('position')->default(0);
+            $table->boolean('private')->default(false);
             $table->timestamps();
         });
     }

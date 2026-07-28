@@ -18,7 +18,7 @@ class ResponseController extends Controller
 
         $validated = $req->validate([
             'answers' => ['array','required'],
-            'answers.*' => ['string', 'max:255']
+            'answers.*' => ['string', 'max:255', 'nullable']
         ]);
 
         $str = implode('|',$validated['answers']);
@@ -104,21 +104,35 @@ class ResponseController extends Controller
                     );
                 }
 
+                if(!$question['private'] || $survey->user_id == auth()->id()){
                 $analysis[$question->id] = [
                     'question' => $question->question,
                     'type' => 'choice',
                     'total' => count($answers),
-                    'results' => $percentages
-                ];
+                    'results' => $percentages,
+                    'private' => false
+                ];}else{
+                    $analysis[$question->id] = [
+                    'question' => $question->question,
+                    'private' => true
+                    ];
+                }
 
             } else {
 
+                if(!$question['private'] || $survey->user_id == auth()->id()){
                 $analysis[$question->id] = [
                     'question' => $question->question,
                     'type' => 'text',
                     'total' => count($answers),
-                    'answers' => $answers
-                ];
+                    'answers' => $answers,
+                    'private' => false
+                ];}else{
+                    $analysis[$question->id] = [
+                    'question' => $question->question,
+                    'private' => true
+                    ];
+                }
             }
 
             $ans_ind++;

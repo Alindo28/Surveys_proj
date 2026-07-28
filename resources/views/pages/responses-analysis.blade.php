@@ -34,7 +34,7 @@
                                 {{ $question['question'] }}
                             </h2>
 
-
+                            @if (!$question['private'])
                             <p class="text-sm text-base-content/70">
                                 Responses: {{ $question['total'] }}
                             </p>
@@ -96,8 +96,9 @@
 
 
                             @endif
-
-
+                        @else
+                            <p>Hidden results</p>
+                        @endif
                         </div>
 
                     </div>
