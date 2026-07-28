@@ -222,24 +222,26 @@ document.getElementById(`remove-${cInd}`).addEventListener('click', ()=>{
 })
 
 document.getElementById(`type-selection-${cInd}`).addEventListener('change', (e)=>{
-    if(e.target.value == 'text'){
+    toggleVisibility(e.target.value);
+})
+
+function toggleVisibility(val){
+    if(val == 'text'){
         document.getElementById(`field-${cInd}`).classList.remove('hidden');
         document.getElementById(`options-${cInd}`).classList.add('hidden');
         document.getElementById(`slider-${cInd}`).classList.add('hidden');
     }
-    if(e.target.value == 'choice' || e.target.value == 'select'){
+    if(val == 'choice' || val == 'select'){
         document.getElementById(`field-${cInd}`).classList.add('hidden');
         document.getElementById(`options-${cInd}`).classList.remove('hidden');
         document.getElementById(`slider-${cInd}`).classList.add('hidden');
     }
-    if(e.target.value == 'slider'){
+    if(val == 'slider'){
         document.getElementById(`field-${cInd}`).classList.add('hidden');
         document.getElementById(`options-${cInd}`).classList.add('hidden');
         document.getElementById(`slider-${cInd}`).classList.remove('hidden');
     }
-
-
-})
+}
 
 let optionsData = {
     'cInd' : cInd,
@@ -287,11 +289,13 @@ document.getElementById(`add-options-${cInd}`).addEventListener('click', () => {
     addOption(optionsData)
 })
 
-if(question!=null && question['type']==='choice')
+console.log(question);
+if(question!=null && (question['type']==='choice' || question['type']==='select'))
 question['options'].split('|').forEach((option)=>{
     addOption(optionsData, option);
 })
 
+toggleVisibility(question['type']);
 setInd(getInd() + 1);
 
 }

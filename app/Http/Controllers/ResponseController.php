@@ -118,12 +118,63 @@ class ResponseController extends Controller
                     ];
                 }
 
-            } else {
+            }
+            else if ($question->type === 'select') {
+
+                $counts = [];
+
+                foreach ($answers as $answer) {
+                    foreach(explode(',',$answer) as $single_answer){
+                        $counts[$single_answer] = ($counts[$single_answer] ?? 0) + 1;
+                    }
+                }
+
+                $percentages = [];
+
+                foreach ($counts as $option => $count) {
+                    $percentages[$option] = round(
+                        ($count / count($answers)) * 100,
+                        1
+                    );
+                }
+
+                if(!$question['private'] || $survey->user_id == auth()->id()){
+                $analysis[$question->id] = [
+                    'question' => $question->question,
+                    'type' => 'choice',
+                    'total' => count($answers),
+                    'results' => $percentages,
+                    'private' => false
+                ];}else{
+                    $analysis[$question->id] = [
+                    'question' => $question->question,
+                    'private' => true
+                    ];
+                }
+
+            }
+            else if($question->type === 'text') {
 
                 if(!$question['private'] || $survey->user_id == auth()->id()){
                 $analysis[$question->id] = [
                     'question' => $question->question,
                     'type' => 'text',
+                    'total' => count($answers),
+                    'answers' => $answers,
+                    'private' => false
+                ];}else{
+                    $analysis[$question->id] = [
+                    'question' => $question->question,
+                    'private' => true
+                    ];
+                }
+            }
+            else if($question->type === 'slider') {
+                if(!$question['private'] || $survey->user_id == auth()->id()){
+                $analysis[$question->id] = [
+                    'question' => $question->question,
+                    'type' => 'slider',
+                    'options' => $question->options,
                     'total' => count($answers),
                     'answers' => $answers,
                     'private' => false
