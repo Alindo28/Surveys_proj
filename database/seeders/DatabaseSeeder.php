@@ -18,15 +18,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(20)
-        //     ->has(
-        //         Survey::factory(5)
-        //             ->has(
-        //                 SurveyQuestion::factory(5),
-        //                 'questions'
-        //             )
-        //     )
-        //     ->create();
+        User::factory(20)
+            ->has(
+                Survey::factory(5)
+                    ->has(
+                        SurveyQuestion::factory(5),
+                        'questions'
+                    )
+            )
+            ->create();
 
         Response::factory(500)->create();
     }

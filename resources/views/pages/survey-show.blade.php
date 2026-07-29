@@ -146,12 +146,16 @@
 
 
 
-                    <button {{ $survey->user_id == auth()->id() || $survey->alreadyResponded()
+                    <button {{ $survey->user_id == auth()->id() || $survey->alreadyResponded() || $survey['status'] == 'closed'
                      ? 'disabled' : '' }} class="btn btn-primary w-full">
 
-                    {{ $survey->alreadyResponded() ?
-                    'Already Responded'
-                    :'Submit Survey'}}
+                    @if ($survey->alreadyResponded())
+                        Already Responded
+                    @elseif ($survey['status'] == 'closed')
+                        Submission closed
+                    @else
+                        Submit
+                    @endif
 
                     </button>
                 </form>

@@ -15,7 +15,7 @@
 
             <div class="pl-[20vw]">
                 <a href="{{ route('survey.create.show') }}" class="btn btn-primary">
-                    Create Survey
+                    + Create Survey
                 </a>
             </div>
 
@@ -102,4 +102,6 @@
     @endif
 
 </div>
+
+{{ $surveys->links() }}
 </x-base>

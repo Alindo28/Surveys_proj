@@ -7,6 +7,8 @@ use App\Models\SurveyQuestion;
 use Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
+
 
 class SurveyController extends Controller
 {
@@ -16,7 +18,7 @@ class SurveyController extends Controller
 
     public function show(){
         $surveys = Survey::where('status', '!=', 'draft')
-                        ->where('status', '!=', 'archived')->get();
+                        ->where('status', '!=', 'archived')->orderBy('created_at','desc')->paginate(9);
         return view('pages.survey-show-all', ['surveys'=>$surveys]);
     }
 
@@ -106,10 +108,14 @@ class SurveyController extends Controller
 
     public function showEdit($id){
         $survey = Survey::find($id);
+        if($survey['user_id'] != auth()->id())abort(HttpResponse::HTTP_UNAUTHORIZED);
         return view('pages.survey-edit', ['survey' => $survey]);
     }
 
     public function update(Request $req, $id){
+        $survey = Survey::findOrFail($id);
+        if($survey['user_id'] != auth()->id())abort(HttpResponse::HTTP_UNAUTHORIZED);
+
         $validated = $req->validate(
             [
                 'title' => ['string','required','max:255'],
@@ -135,8 +141,6 @@ class SurveyController extends Controller
         }
 
         $validated['user_id'] = Auth::user()->id;
-
-        $survey = Survey::find($id);
 
         $survey->update([
             'title' => $validated['title'],

@@ -7,12 +7,13 @@ use Carbon\CarbonInterval;
 use App\Models\Response;
 use App\Models\Survey;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ResponseController extends Controller
 {
     public function create(Request $req, int $id){
 
-        if(Survey::alreadyRespondedStatic($id) || Survey::where('id',$id)->where('user_id',auth()->id())->exists()){
+        if(Survey::alreadyRespondedStatic($id) || Survey::find($id)['status'] == 'closed' || Survey::where('id',$id)->where('user_id',auth()->id())->exists()){
             return abort(400, 'You are not allowed to respond to this survey');
         }
 
@@ -22,7 +23,6 @@ class ResponseController extends Controller
         ]);
 
         $str = implode('|',$validated['answers']);
-
 
 
         $start = Carbon::parse(session('start_time'));
@@ -44,6 +44,8 @@ class ResponseController extends Controller
 
     public function view($id){
         $survey = Survey::findOrFail($id);
+        if($survey['user_id'] != auth()->id())abort(HttpResponse::HTTP_UNAUTHORIZED);
+
         $responses = Response::where('survey_id',$id)->get()->reverse();
 
         return(view('pages.responses-view', ['survey' => $survey, 'responses' => $responses]));
