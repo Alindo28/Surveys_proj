@@ -122,34 +122,36 @@ class SurveyController extends Controller
                 'description' => ['string','max:255','nullable'],
                 'questions' => ['array','required','min:1'],
                 'questions.*.question' => ['string','required','max:255'],
-                'questions.*.type' => ['required','in:text,choice'],
+                'questions.*.type' => ['required','in:text,choice,slider,select'],
                 'questions.*.required' => ['sometimes'],
+                'questions.*.private' => ['sometimes'],
                 'questions.*.options' => ['nullable', 'array', 'min:1'],
-                'questions.*.options.*' => ['string', 'required', 'max:255']
+                'questions.*.options.*' => ['string', 'required', 'max:255'],
+                'questions.*.range' => ['nullable', 'array', 'min:2', 'max:2'],
+                'questions.*.range.*' => ['integer', 'required']
             ]
         );
         foreach ($validated['questions'] as &$question) {
-            if (!isset($question['required'])) {
-                $question['required'] = false;
+            if (!isset($question['required'])){
+                    $question['required'] = false;
             }
-        }
 
-        foreach($validated['questions'] as &$question){
             if(isset($question['options'])){
                 $question['options'] = Arr::join($question['options'],'|');
             }
+
+            if($question['type'] === 'slider'){
+                $question['options'] = Arr::join($question['range'],'|');
+            }else $question['range'] = null;
         }
 
-        $validated['user_id'] = Auth::user()->id;
-
-        $survey->update([
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-        ]);
+        $survey = Survey::findOrFail($id);
+        if($survey['user_id'] != auth()->id())abort(HttpResponse::HTTP_UNAUTHORIZED);
 
         SurveyQuestion::where(['survey_id' => $survey->id])->delete();
 
         foreach($validated['questions'] as &$question){
+            unset($question['range']);
             $question['survey_id'] = $survey->id;
             SurveyQuestion::create($question);
         }
