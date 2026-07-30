@@ -3,9 +3,11 @@
     'surveyQuestions' => []]
 )
 <x-base>
-    <div class="min-h-screen bg-base-200 py-10">
+    <div class="min-h-screen bg-base-200">
 
     <div class="max-w-3xl mx-auto">
+
+        <a href="{{ route('context.show', ['id' => $survey->context->id]) }}"><button class="btn btn-info bg-gray-300/30 my-5">< Read Context</button></a>
 
         <!-- Survey Card -->
         <div class="card bg-base-100 shadow-xl">

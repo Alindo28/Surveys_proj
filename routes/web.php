@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContextController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
@@ -22,8 +23,14 @@ Route::middleware('guest')->controller(AuthController::class)->group(function(){
 
 Route::middleware('auth')->group(function(){
     Route::post('/auth/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/survey/create', [SurveyController::class, 'showCreate'])->name('survey.create.show');
-    Route::post('/survey/create', [SurveyController::class, 'create'])->name('survey.create');
+
+    Route::get('/survey/context/view/{id}', [ContextController::class, 'view'])->name('context.show');
+    Route::get('/survey/context/create', [ContextController::class, 'showCreate'])->name('survey.create.context.show');
+    Route::post('/survey/context/create', [ContextController::class, 'create'])->name('survey.create.context');
+
+    Route::get('/survey/create/{context_id}', [SurveyController::class, 'showCreate'])->name('survey.create.show');
+    Route::post('/survey/create/{context_id}', [SurveyController::class, 'create'])->name('survey.create');
+
     Route::get('/survey/view/{id}', [SurveyController::class, 'view'])->name('survey.view');
     Route::get('/survey/my', [SurveyController::class, 'viewMy'])->name('survey.view.my');
 

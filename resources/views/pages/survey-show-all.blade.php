@@ -1,107 +1,198 @@
+@props(['contexts' => collect()])
 
 <x-base>
-    <div class="max-w-6xl mx-auto px-6 py-10">
 
-    <div class="flex justify-center items-center mb-8 mr-[-20vw]">
-        <div class="flex flex-col justify-center items-center">
+<div class="max-w-7xl mx-auto px-6 py-10">
+
+    {{-- Header --}}
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+
+        <div>
             <h1 class="text-4xl font-bold">
                 Available Surveys
             </h1>
 
-            <p class="text-base-content/70 mt-2">
-                Browse and complete surveys created by the community.
+            <p class="text-base-content/60 mt-2">
+                Browse surveys grouped by context.
             </p>
         </div>
 
-            <div class="pl-[20vw]">
-                <a href="{{ route('survey.create.show') }}" class="btn btn-primary">
-                    + Create Survey
-                </a>
-            </div>
-
-
+        <a href="{{ route('survey.create.context.show') }}"
+           class="btn btn-primary">
+            + Create Survey
+        </a>
 
     </div>
-    @if($surveys->count())
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            @foreach($surveys as $survey)
+    @if($contexts->count())
 
-                <div class="card bg-base-200 shadow-xl">
+        {{-- Context Grid --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+
+            @foreach($contexts as $context)
+
+                <div class="card bg-base-100 shadow-lg hover:shadow-xl transition duration-300">
+
 
                     <div class="card-body">
 
-                        <div class="flex justify-between items-start">
 
-                            <h2 class="card-title">
-                                {{ $survey->title }}
+                        {{-- Context Title --}}
+                        <div>
+
+                            <h2 class="text-2xl font-bold">
+                                {{ $context->title }}
                             </h2>
 
-                            <div class="badge badge-primary">
-                                {{ $survey->status }}
+                            <p class="text-sm text-base-content/60 mt-2 line-clamp-3">
+                                {{ $context->preview }}
+                            </p>
+
+                            <div class="flex justify-end my-3">
+                                <a href="{{ route('context.show', ['id' => $context->id]) }}"><button class="btn btn-info bg-gray-300/30">Read Context ></button></a>
                             </div>
 
                         </div>
 
 
-                        <p class="text-base-content/70">
-                            {{ Str::limit($survey->description, 120) }}
-                        </p>
 
+                        {{-- Context Preview --}}
+                        <div class="bg-base-200 rounded-xl p-4">
 
-                        <div class="mt-4 text-sm">
-                            <p>
-                                Total questions:
-                                {{ $survey->questions->count() }}
-                            </p>
+                            <div class="flex justify-between items-center">
 
-                            <p>
-                                Created by:
-                                <span class="font-semibold">
-                                    {{ $survey->user->full_name }}
+                                <span class="text-sm font-medium">
+                                    Available Surveys:
                                 </span>
+
+                                <span class="badge badge-primary w-7 h-7 rounded-full bg-gray-500/60 text-gray-100 border-none">
+                                    {{ $context->surveys
+                                        ->whereNotIn('status',['draft','archived'])
+                                        ->count()
+                                    }}
+                                </span>
+
+                            </div>
+
+
+                            <p class="text-xs text-base-content/60 mt-2">
+                                Explore surveys related to this category.
                             </p>
 
-                            <p>
-                                Created:
-                                {{ $survey->created_at->format('M d, Y') }}
-                            </p>
                         </div>
 
 
-                        <div class="card-actions flex flex-col justify-end mt-4">
 
-                            <a href="{{ route('survey.view', [$survey->id]) }}"
-                                class="btn btn-primary"
-                            >
-                                View Survey
-                            </a>
+                        {{-- Surveys Preview --}}
+                        <div class="mt-5 space-y-3">
 
-                            @if ($survey->alreadyResponded())
-                                <p class="text-[12px] text-accent">Completed</p>
-                            @endif
+
+                            @forelse(
+                                $context->surveys
+                                ->whereNotIn('status',['draft','archived'])
+                                ->take(3)
+                                as $survey
+                            )
+
+
+                                <div class="flex items-center justify-between
+                                            bg-base-200 rounded-lg px-3 py-2">
+
+
+                                    <div class="flex flex-col gap-y-1">
+                                    <span class="font-medium text-sm truncate">
+                                        {{ $survey->title }}
+                                    </span>
+                                    <span class="text-[10px]">Total questions: {{ $survey->questions->count() }}</span>
+                                    <span class="text-[10px]">Estimated time: {{ $survey->responses->count() > 0 ? gmdate('H:i:s', round($survey->responses->sum('duration') / $survey->responses->count(), 2))  : 'not available'}}</span>
+                                    </div>
+
+
+                                    <a href="{{ route('survey.view',['id'=>$survey->id]) }}"
+                                       class="btn btn-xs btn-primary">
+
+                                        View
+
+                                    </a>
+
+
+                                </div>
+
+
+                            @empty
+
+                                <p class="text-sm text-base-content/50">
+                                    No active surveys.
+                                </p>
+
+                            @endforelse
+
 
                         </div>
+
+
+
+                        {{-- Footer --}}
+                        @if($context->surveys->whereNotIn('status',['draft','archived'])->count() > 3)
+
+                            <div class="mt-4">
+
+                                <a href="{{ route('context.show', ['id' => $context->id]) }}"
+                                   class="text-primary text-sm font-semibold">
+                                    View all surveys →
+                                </a>
+
+                            </div>
+
+                        @endif
+
 
                     </div>
 
+
                 </div>
 
+
             @endforeach
+
 
         </div>
 
 
     @else
 
-        <div class="alert">
-            <span>No surveys available.</span>
+
+        <div class="hero bg-base-200 rounded-xl py-16">
+
+            <div class="hero-content text-center">
+
+                <div>
+
+                    <h2 class="text-2xl font-bold">
+                        No survey contexts available
+                    </h2>
+
+                    <p class="text-base-content/70 mt-3">
+                        Create a context and start adding surveys.
+                    </p>
+
+                    <a href="{{ route('survey.create.context.show') }}"
+                       class="btn btn-primary mt-6">
+                        Create Context
+                    </a>
+
+                </div>
+
+            </div>
+
         </div>
+
 
     @endif
 
+
 </div>
 
-{{ $surveys->links() }}
 </x-base>

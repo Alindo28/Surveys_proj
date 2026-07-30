@@ -25,6 +25,10 @@ class Survey extends Model
         return $this->hasMany(Response::class);
     }
 
+    public function context(){
+        return $this->belongsTo(SurveyContext::class);
+    }
+
     public function alreadyResponded():bool{
         if(Response::where('survey_id',$this->id)->where('user_id', auth()->id())->exists())return true;
         return false;

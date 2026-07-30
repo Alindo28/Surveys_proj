@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('surveys', function (Blueprint $table) {
+        Schema::create('context_blocks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('context_id')->constrained('survey_contexts')->cascadeOnDelete();
-            $table->string('title');
-            $table->string('description')->nullable();
-            $table->enum('status', ['draft', 'active', 'closed', 'archived'])->default('draft');
-
-
-            $table->timestamps();
+            $table->integer('position')->default(0);
+            $table->enum('type',['text', 'image'])->default('text');
+            $table->string('value');
         });
     }
 
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('surveys');
+        Schema::dropIfExists('context_blocks');
     }
 };

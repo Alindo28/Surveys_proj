@@ -295,7 +295,8 @@ question['options'].split('|').forEach((option)=>{
     addOption(optionsData, option);
 })
 
-toggleVisibility(question['type']);
+if(question)toggleVisibility(question['type']);
+
 setInd(getInd() + 1);
 
 }

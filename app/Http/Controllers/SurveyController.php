@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Survey;
+use App\Models\SurveyContext;
 use App\Models\SurveyQuestion;
 use Arr;
 use Illuminate\Support\Facades\Auth;
@@ -17,9 +18,12 @@ class SurveyController extends Controller
     }
 
     public function show(){
-        $surveys = Survey::where('status', '!=', 'draft')
-                        ->where('status', '!=', 'archived')->orderBy('created_at','desc')->paginate(9);
-        return view('pages.survey-show-all', ['surveys'=>$surveys]);
+        // $surveys = Survey::where('status', '!=', 'draft')
+        //                 ->where('status', '!=', 'archived')->orderBy('created_at','desc')->paginate(9);
+        // return view('pages.survey-show-all', ['surveys'=>$surveys]);
+
+        $contexts = SurveyContext::get();
+        return view('pages.survey-show-all', ['contexts'=>$contexts]);
     }
 
 
@@ -37,11 +41,11 @@ class SurveyController extends Controller
         ]);
     }
 
-    public function showCreate(){
-        return view('pages.survey-create');
+    public function showCreate($context_id){
+        return view('pages.survey-create', ['context_id' => $context_id]);
     }
 
-    public function create(Request $req){
+    public function create(Request $req, $context_id){
         $validated = $req->validate(
             [
                 'title' => ['string','required','max:255'],
@@ -77,6 +81,7 @@ class SurveyController extends Controller
             'title' => $validated['title'],
             'description' => $validated['description'],
             'user_id' => auth()->id(),
+            'context_id' => $context_id
         ]);
 
         foreach($validated['questions'] as &$question){
@@ -90,8 +95,8 @@ class SurveyController extends Controller
     }
 
     public function viewMy(){
-        $surveys = Survey::where('user_id','=',auth()->id())->get();
-        return view('pages.survey-show-my-all', ['surveys' => $surveys]);
+        $contexts = SurveyContext::where('user_id', auth()->id())->with(['surveys.questions', 'surveys.responses'])->get();
+        return view('pages.survey-show-my-all', ['contexts' => $contexts]);
     }
 
     public function changeStatus(Request $req, $id){

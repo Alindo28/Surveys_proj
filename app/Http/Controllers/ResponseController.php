@@ -58,6 +58,8 @@ class ResponseController extends Controller
 
         $responses = Response::where('survey_id', $id)->get();
 
+        if($responses->count() <= 0)return redirect()->back();
+
         $avg_time = 0;
         foreach($responses as $r){
             $avg_time += $r['duration'];

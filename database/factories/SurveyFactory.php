@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Survey;
+use App\Models\SurveyContext;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
 
@@ -18,8 +19,10 @@ class SurveyFactory extends Factory
      */
 public function definition(): array
 {
+    $context = SurveyContext::inRandomOrder()->first();
     return [
-        'user_id' => User::factory(),
+        'context_id' => $context->id,
+        'user_id' => $context->user_id,
         'title' => fake()->sentence(3),
         'description' => fake()->sentence(),
         'status' => fake()->randomElement([

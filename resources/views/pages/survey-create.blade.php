@@ -1,3 +1,4 @@
+@props(['context_id' => null])
 <x-base :additionalResource="['resources/js/servey-create.js']">
         <div class="max-w-4xl mx-auto py-10 px-6">
 
@@ -6,7 +7,7 @@
         </h1>
 
 
-        <form action="{{ route('survey.create') }}" method="POST">
+        <form action="{{ route('survey.create', ['context_id' => $context_id]) }}" method="POST">
 
             @csrf
 

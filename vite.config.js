@@ -7,7 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js', 'resources/js/servey-create.js', 'resources/js/survey-edit.js'],
+            input: ['resources/css/app.css', 'resources/js/app.js',
+                 'resources/js/servey-create.js', 'resources/js/survey-edit.js',
+                'resources/js/context-create.js'],
             refresh: true,
             fonts: [
                 bunny('Instrument Sans', {
