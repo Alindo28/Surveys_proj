@@ -145,7 +145,7 @@ class ResponseController extends Controller
                 if(!$question['private'] || $survey->user_id == auth()->id()){
                 $analysis[$question->id] = [
                     'question' => $question->question,
-                    'type' => 'choice',
+                    'type' => 'select',
                     'total' => count($answers),
                     'results' => $percentages,
                     'private' => false

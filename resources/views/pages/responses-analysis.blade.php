@@ -124,7 +124,7 @@
 
 
 
-                            @elseif($question['type'] === 'choice' || $question['type'] === 'select')
+                            @elseif($question['type'] == 'choice' || $question['type'] == 'select')
 
 
 

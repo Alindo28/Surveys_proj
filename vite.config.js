@@ -9,7 +9,7 @@ export default defineConfig({
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js',
                  'resources/js/servey-create.js', 'resources/js/survey-edit.js',
-                'resources/js/context-create.js'],
+                'resources/js/context-create.js', 'resources/js/context-edit.js', 'resources/js/context-util.js'],
             refresh: true,
             fonts: [
                 bunny('Instrument Sans', {

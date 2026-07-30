@@ -62,40 +62,57 @@
                             <div class="card-body">
 
 
-                                <div class="flex justify-between items-center">
+                                <div class="flex justify-center items-center gap-5">
 
 
-                                    <div>
+                                    <div class="flex-8">
 
                                         <h2 class="text-2xl font-bold">
                                             {{ $context->title }}
                                         </h2>
 
                                         <p class="text-sm text-base-content/70">
-                                            {{ $context->description }}
+                                            {{ $context->preview }}
                                         </p>
 
                                     </div>
 
+                                    <div class="flex-0.5"></div>
 
-
-                                    <div class="flex gap-2">
-
-
-                                        <a href="{{ route('context.show', ['id' => $context->id]) }}"
-                                            class="btn btn-sm btn-outline">
-
-                                            View Context
-
-                                        </a>
+                                    <div class="flex flex-5 gap-2">
 
 
                                         <a href="{{ route('survey.create.show', ['context_id' => $context->id]) }}"
-                                            class="btn btn-sm btn-primary">
+                                            class="btn btn-m btn-primary mr-5">
 
                                             + Add Survey
 
                                         </a>
+
+
+                                        <a href="{{ route('context.show', ['id' => $context->id]) }}"
+                                            class="btn btn-m btn-outline">
+
+                                            View
+
+                                        </a>
+
+                                            <a href="{{ route('context.edit.show', ['id' => $context->id]) }}"
+                                            class="btn btn-accent btn-m">
+
+                                            Edit
+
+                                        </a>
+
+                                        <form action="{{ route('context.delete', ['id' => $context->id]) }}" method="post">
+                                            @method('delete')
+                                            @csrf
+                                            <button type="submit" class="btn bg-red-700/90 text-gray-100 btn-m">
+                                                Delete
+                                            </button>
+
+                                        </form>
+
 
 
                                     </div>

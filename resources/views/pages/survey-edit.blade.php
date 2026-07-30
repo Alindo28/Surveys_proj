@@ -43,7 +43,6 @@
                 <script>
                     questions = @json($survey->questions);
                     window.onload = ()=>{
-                        console.log(questions.length);
                         for(let i=0; i < questions.length; i++){
                             createQuestion(questions[i]);
                         }

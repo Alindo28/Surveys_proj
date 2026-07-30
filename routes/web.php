@@ -17,8 +17,7 @@ Route::middleware('guest')->controller(AuthController::class)->group(function(){
     Route::get('/auth/register', 'showRegister');
     Route::post('/auth/login', 'login')->name('login');
     Route::post('/auth/register', 'register')->name('register');
-    // Route::post('/auth/login');
-    // Route::post('/auth/register');
+
 });
 
 Route::middleware('auth')->group(function(){
@@ -27,6 +26,10 @@ Route::middleware('auth')->group(function(){
     Route::get('/survey/context/view/{id}', [ContextController::class, 'view'])->name('context.show');
     Route::get('/survey/context/create', [ContextController::class, 'showCreate'])->name('survey.create.context.show');
     Route::post('/survey/context/create', [ContextController::class, 'create'])->name('survey.create.context');
+
+    Route::get('/survey/context/my/{id}', [ContextController::class, 'showEdit'])->name('context.edit.show');
+    Route::put('/survey/context/my/{id}', [ContextController::class, 'update'])->name('context.edit');
+    Route::delete('/survey/context/my/{id}', [ContextController::class, 'delete'])->name('context.delete');
 
     Route::get('/survey/create/{context_id}', [SurveyController::class, 'showCreate'])->name('survey.create.show');
     Route::post('/survey/create/{context_id}', [SurveyController::class, 'create'])->name('survey.create');

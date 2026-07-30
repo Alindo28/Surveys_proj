@@ -196,10 +196,10 @@ let questionHtml = `
                             required
                             placeholder="Ending number"
                             min="0"
-                            max="1000"
+                            max="10000000"
                             value=10
                             />
-                            <p class="validator-hint">Must be between be 0 to 1000</p>
+                            <p class="validator-hint">Must be between be 0 to 10000000</p>
                             </div>
 
                         </div>

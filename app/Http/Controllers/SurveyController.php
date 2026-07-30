@@ -22,7 +22,7 @@ class SurveyController extends Controller
         //                 ->where('status', '!=', 'archived')->orderBy('created_at','desc')->paginate(9);
         // return view('pages.survey-show-all', ['surveys'=>$surveys]);
 
-        $contexts = SurveyContext::get();
+        $contexts = SurveyContext::paginate(9);
         return view('pages.survey-show-all', ['contexts'=>$contexts]);
     }
 
@@ -95,7 +95,7 @@ class SurveyController extends Controller
     }
 
     public function viewMy(){
-        $contexts = SurveyContext::where('user_id', auth()->id())->with(['surveys.questions', 'surveys.responses'])->get();
+        $contexts = SurveyContext::where('user_id', auth()->id())->with(['surveys.questions', 'surveys.responses'])->orderBy('created_at', 'desc')->get();
         return view('pages.survey-show-my-all', ['contexts' => $contexts]);
     }
 

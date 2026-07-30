@@ -1,6 +1,9 @@
 @props([
     'context' => null
 ])
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
 <x-base>
 
 <div class="min-h-screen bg-base-200 py-12">
@@ -56,7 +59,7 @@
                     <figure class="space-y-3">
 
                         <img
-                            src="{{$block->value }}"
+                            src="{{ Storage::disk('public')->exists($block->value) ? Storage::url($block->value) : $block->value }}"
                             class="w-full rounded-lg shadow-md"
                         >
 
@@ -160,13 +163,16 @@
 
                         </div>
 
-                        <div class="card-actions justify-end mt-5">
+                        <div class="card-actions flex flex-col items-end mt-5">
 
                             <a
                                 href="{{ route('survey.view', ['id'=>$survey->id]) }}"
                                 class="btn btn-primary btn-sm">
                                 Open Survey
                             </a>
+                            @if ($survey->responses->where('user_id',auth()->id())->count() > 0)
+                                <p class="text-[12px] text-success">completed</p>
+                            @endif
 
                         </div>
 
