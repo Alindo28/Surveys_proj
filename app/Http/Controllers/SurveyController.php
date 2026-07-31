@@ -17,13 +17,39 @@ class SurveyController extends Controller
         return view('pages.index');
     }
 
-    public function show(){
+    public function show(Request $req){
         // $surveys = Survey::where('status', '!=', 'draft')
         //                 ->where('status', '!=', 'archived')->orderBy('created_at','desc')->paginate(9);
         // return view('pages.survey-show-all', ['surveys'=>$surveys]);
 
-        $contexts = SurveyContext::paginate(9);
-        return view('pages.survey-show-all', ['contexts'=>$contexts]);
+        $search = request('search');
+         $sort = $req->input('sort', 'newest');
+
+        $contexts = SurveyContext::with('tags')
+            ->when($search, function ($query) use ($search) {
+
+                $query->where(function ($q) use ($search) {
+
+                    $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhereHas('tags', function ($tagQuery) use ($search) {
+                        $tagQuery->where('name', 'like', "%{$search}%");
+                    });
+
+                });
+
+            })        ->when($sort === 'newest', function ($query) {
+            $query->orderBy('created_at', 'desc');
+        })
+        ->when($sort === 'oldest', function ($query) {
+            $query->orderBy('created_at', 'asc');
+        })
+        ->when($sort === 'name', function ($query) {
+            $query->orderBy('title', 'asc');
+        })
+        ->paginate(9);
+
+        return view('pages.survey-show-all', ['contexts' => $contexts->appends(request()->query())]);
     }
 
 

@@ -3,11 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\ContextBlock;
+use App\Models\ContextTag;
 use App\Models\Response;
 use App\Models\Survey;
 use App\Models\SurveyContext;
 use App\Models\SurveyQuestion;
 use App\Models\User;
+use App\Models\Tag;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -48,12 +50,28 @@ class DatabaseSeeder extends Seeder
             Response::factory($num)->createQuietly();
         };
 
-        $mainR = function() use($makeUsers, $makeSurveys, $makeResponses){
+        $makeTags = function($num){
+            for($i = 0; $i < $num; $i++){
+                $context = SurveyContext::inRandomOrder()->first();
+                $tag = Tag::inRandomOrder()->first();
+
+                if(!ContextTag::where('context_id', $context->id)->where('tag_id',$tag->id)->exists()){
+                    ContextTag::create([
+                        'context_id' => $context->id,
+                        'tag_id' => $tag->id
+                    ]);
+                }
+            }
+        };
+
+        $mainR = function() use($makeUsers, $makeSurveys, $makeResponses, $makeTags){
             // $makeUsers();
 
             // for($i = 0; $i < 100; $i++)$makeSurveys();
 
-            for($i = 0; $i < 100; $i++)$makeResponses();
+            // for($i = 0; $i < 100; $i++)$makeResponses();
+
+            // $makeTags(300);
         };
 
         $mainR();

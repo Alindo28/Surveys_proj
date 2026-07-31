@@ -5,7 +5,7 @@
 <div class="max-w-7xl mx-auto px-6 py-10">
 
     {{-- Header --}}
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-6">
 
         <div>
             <h1 class="text-4xl font-bold">
@@ -23,6 +23,51 @@
         </a>
 
     </div>
+
+
+    <form method="GET" action="{{ route('survey.home') }}" class="mb-6">
+
+        <label class="input">
+        <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <g
+            stroke-linejoin="round"
+            stroke-linecap="round"
+            stroke-width="2.5"
+            fill="none"
+            stroke="currentColor"
+            >
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+            </g>
+        </svg>
+        <input
+                type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Search surveys..."
+                class="input input-bordered w-full"
+            >
+        </label>
+
+        <select
+            name="sort"
+            onchange="this.form.submit()"
+            class="select select-bordered select-sm max-w-25"
+        >
+            <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>
+                Newest
+            </option>
+
+            <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>
+                Oldest
+            </option>
+
+            <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>
+                Name
+            </option>
+
+        </select>
+    </form>
 
 
     @if($contexts->count())
@@ -51,7 +96,47 @@
                             </p>
 
                             <div class="flex justify-end my-3">
-                                <a href="{{ route('context.show', ['id' => $context->id]) }}"><button class="btn btn-info bg-gray-300/30">Read Context ></button></a>
+
+                                {{-- Show first few tags --}}
+                                @php
+                                    $tags = $context->tags;
+                                @endphp
+
+                                <div class="flex flex-wrap gap-1">
+
+                                    @foreach($tags->take(3) as $tag)
+
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-base-200 text-xs text-base-content/60">
+
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="w-3 h-3"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M7 7h.01M3 3h7l11 11-7 7L3 10V3z"/>
+                                            </svg>
+
+                                            {{ Str::limit($tag->name, 12) }}
+
+                                        </span>
+
+                                    @endforeach
+
+
+                                    @if($tags->count() > 3)
+
+                                        <button class="text-xs text-base-content/50 hover:text-base-content">
+                                            +{{ $tags->count() - 3 }} more
+                                        </button>
+
+                                    @endif
+
+                                </div>
+
+                                <a href="{{ route('context.show', ['id' => $context->id]) }}"><button class="btn whitespace-nowrap btn-info bg-gray-300/30">Read Context ></button></a>
                             </div>
 
                         </div>
@@ -197,5 +282,4 @@
     </div>
 
 </div>
-
 </x-base>

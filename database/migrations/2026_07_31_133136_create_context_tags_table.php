@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('context_blocks', function (Blueprint $table) {
+        Schema::create('context_tags', function (Blueprint $table) {
             $table->id();
             $table->foreignId('context_id')->constrained('survey_contexts')->cascadeOnDelete();
-            $table->integer('position')->default(0);
-            $table->enum('type',['text', 'image'])->default('text');
-            $table->string('tag')->nullable();
-            $table->string('value');
+            $table->foreignId('tag_id')->constrained('tags')->cascadeOnDelete();
         });
     }
 
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('context_blocks');
+        Schema::dropIfExists('context_tags');
     }
 };

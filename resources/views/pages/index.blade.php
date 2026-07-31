@@ -13,7 +13,7 @@
             </p>
 
             <div class="flex justify-center gap-4">
-                <a href="{{ route('survey.create.show') }}" class="btn btn-primary">
+                <a href="{{ route('survey.create.context.show') }}" class="btn btn-primary">
                     Create a Survey
                 </a>
 

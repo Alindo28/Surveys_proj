@@ -11,7 +11,7 @@
     <article class="max-w-5xl mx-auto bg-base-100 shadow-2xl rounded-xl overflow-hidden">
 
         <!-- Header -->
-        <header class="px-12 pt-12 pb-8 border-b border-base-300">
+        <header class="px-12 pt-12 pb-4 border-b border-base-300">
 
             <div class="text-sm uppercase tracking-widest text-primary font-semibold">
                 Survey Context
@@ -25,7 +25,7 @@
                 {{ $context->preview }}
             </p>
 
-            <div class="mt-8 flex gap-6 text-sm text-base-content/60">
+            <div class="mt-4 flex gap-6 text-sm text-base-content/60">
 
                 <span>
                     {{ $context->created_at->format('F j, Y') }}
@@ -36,6 +36,39 @@
                 </span>
 
             </div>
+
+            <div class="mt-4 flex flex-wrap gap-1">
+
+                                @php
+                                    $tags = $context->tags;
+                                @endphp
+
+                                <div class="flex flex-wrap gap-1">
+
+                                    @foreach($tags as $tag)
+
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-base-200 text-xs text-base-content/60">
+
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="w-3 h-3"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M7 7h.01M3 3h7l11 11-7 7L3 10V3z"/>
+                                            </svg>
+
+                                            {{ Str::limit($tag->name, 30) }}
+
+                                        </span>
+
+                                    @endforeach
+
+                                </div>
+
+        </div>
 
         </header>
 
