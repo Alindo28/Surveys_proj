@@ -95,14 +95,14 @@
                                 {{ $context->preview }}
                             </p>
 
-                            <div class="flex justify-end my-3">
+                            <div class="flex justify-between my-3">
 
                                 {{-- Show first few tags --}}
                                 @php
                                     $tags = $context->tags;
                                 @endphp
 
-                                <div class="flex flex-wrap gap-1">
+                                <div class="flex flex-wrap gap-1 justify-start">
 
                                     @foreach($tags->take(3) as $tag)
 

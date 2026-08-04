@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContextBlock;
+use App\Models\ContextTag;
 use App\Models\SurveyContext;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -15,7 +17,8 @@ class ContextController extends Controller
     }
 
     public function showCreate(){
-        return view('pages.context-create');
+        return view('pages.context-create',
+    ['availableTags' => Tag::select('id','name')->get()]);
     }
 
     public function create(Request $req){
@@ -49,7 +52,11 @@ class ContextController extends Controller
     public function showEdit($id){
         $context = SurveyContext::find($id);
         if($context->user_id != auth()->id())return abort(HttpResponse::HTTP_UNAUTHORIZED);
-        return view('pages.context-edit', ['context' => $context]);
+
+        return view('pages.context-edit', ['context' => $context,
+         'availableTags' => Tag::select('id','name')->get(),
+         'selectedTags' => $context->tags->select('id')
+        ]);
     }
 
     public function update(Request $req, $id){
@@ -74,6 +81,11 @@ class ContextController extends Controller
                 'type' => $block['type'],
                 'value' => $val,
             ]);
+        }
+
+        ContextTag::where('context_id', $context->id)->delete();
+        foreach($req['tags'] as $tag){
+            ContextTag::create(['context_id' => $context->id, 'tag_id' => $tag]);
         }
 
         return redirect()->route('survey.view.my');

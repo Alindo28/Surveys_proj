@@ -19,7 +19,7 @@ class ContextBlockFactory extends Factory
     public function definition(): array
     {
         $type = fake()->randomElement(['text', 'image']);
-        $val= $type == 'text' ? fake()->paragraph(fake()->numberBetween(2,8)) : fake()->imageUrl(700,400);
+        $val= $type == 'text' ? fake()->paragraph(fake()->numberBetween(2,8)) : "https://loremflickr.com/700/400/" + fake()->word();
 
         return [
             'context_id' => SurveyContext::factory(),

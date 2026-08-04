@@ -69,9 +69,9 @@ class DatabaseSeeder extends Seeder
 
             // for($i = 0; $i < 150; $i++)$makeSurveys();
 
-            for($i = 0; $i < 100; $i++)$makeResponses();
+            // for($i = 0; $i < 100; $i++)$makeResponses();
 
-            // $makeTags(300);
+            $makeTags(500);
         };
 
         $mainR();

@@ -37,13 +37,13 @@
 
             </div>
 
-            <div class="mt-4 flex flex-wrap gap-1">
+            <div class="mt-4 flex flex-wrap gap-1 ">
 
                                 @php
                                     $tags = $context->tags;
                                 @endphp
 
-                                <div class="flex flex-wrap gap-1">
+                                <div class="flex flex-wrap gap-1 ">
 
                                     @foreach($tags as $tag)
 

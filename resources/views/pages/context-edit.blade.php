@@ -1,4 +1,4 @@
-@props(['context' => null])
+@props(['context' => null, 'availableTags' => null, 'selectedTags'])
 <x-base :additionalResource="['resources/js/context-edit.js', 'resources/js/context-create.js']">
 
 <div class="min-h-screen bg-base-200 py-10">
@@ -88,6 +88,39 @@
 
 
                     </div>
+
+                                            <div class="form-control mt-6">
+
+                            <label class="label">
+                                <span class="label-text font-semibold">
+                                    Tags
+                                </span>
+                            </label>
+
+
+                            {{-- Selected tags --}}
+                            <div id="selected-tags" class="flex flex-wrap gap-2 mb-3">
+                            </div>
+
+
+                            <button type="button" id="add-tag-btn" class="btn btn-sm btn-outline w-fit">
+                                + Add Tag
+                            </button>
+
+
+                            {{-- Hidden tag selector --}}
+                            <div id="tag-picker" class="hidden mt-4 p-4 bg-base-200 rounded-lg">
+
+                                <input id="tag-search" type="text" placeholder="Search tags..."
+                                    class="input input-bordered w-full">
+
+
+                                <div id="available-tags" class="mt-3 max-h-48 overflow-y-auto space-y-1">
+                                </div>
+
+                            </div>
+
+                        </div>
 
 
                 </div>
@@ -203,5 +236,9 @@
 
 </div>
 
+    <script>
+        window.availableTags = @json($availableTags);
+        window.selectedTags = @json($selectedTags);
+    </script>
 
 </x-base>
