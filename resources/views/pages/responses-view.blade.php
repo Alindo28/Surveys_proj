@@ -76,7 +76,7 @@
 
 
                             @php
-                                $answers = explode('|',$response['answers']);
+                                $answers = $response['answers'];
                             @endphp
 
 

@@ -12,29 +12,23 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 class ResponseController extends Controller
 {
     public function create(Request $req, int $id){
-
         if(Survey::alreadyRespondedStatic($id) || Survey::find($id)['status'] == 'closed' || Survey::where('id',$id)->where('user_id',auth()->id())->exists()){
             return abort(400, 'You are not allowed to respond to this survey');
         }
 
         $validated = $req->validate([
             'answers' => ['array','required'],
-            'answers.*' => ['string', 'max:255', 'nullable']
         ]);
-
-        $str = implode('|',$validated['answers']);
-
 
         $start = Carbon::parse(session('start_time'));
         $dura = ceil($start->diffInSeconds(now()));
 
         session()->forget('start_time');
 
-
         Response::create([
             'user_id'=>auth()->id(),
             'survey_id'=>$id,
-            'answers'=>$str,
+            'answers'=>$validated['answers'],
             'duration'=>$dura
         ]);
 
@@ -71,65 +65,57 @@ class ResponseController extends Controller
         $ans_ind = 0;
         foreach ($survey->questions as $question) {
 
-            $reses = Response::where('survey_id',$survey->id)->get();
-
-            $all_responses = [];
-            foreach($reses as $res){
-                $all_responses[] = explode('|', $res->answers);
-            }
-
-
-            $answers = [];
-
-            foreach($all_responses as $resp){
-                $i = 0;
-                foreach($resp as $ans){
-                    if($i == $ans_ind){
-                        $answers[] = $ans;
-                    }
-                    $i++;
+            $answers = $responses->map(function ($res) use($question){
+                if(isset($res->answers[$question->id])){
+                    return $res->answers[$question->id];
                 }
-            }
+            });
 
             if ($question->type === 'choice') {
 
                 $counts = [];
 
+                // Add all options with 0 votes
+                foreach ($question->options as $option) {
+                    $counts[$option] = 0;
+                }
+
+                // Count answers
                 foreach ($answers as $answer) {
-                    $counts[$answer] = ($counts[$answer] ?? 0) + 1;
+                    if (isset($counts[$answer])) {
+                        $counts[$answer]++;
+                    }
                 }
 
                 $percentages = [];
 
                 foreach ($counts as $option => $count) {
-                    $percentages[$option] = round(
-                        ($count / count($answers)) * 100,
-                        1
-                    );
+                    $percentages[$option] = count($answers) > 0
+                        ? round(($count / count($answers)) * 100, 1)
+                        : 0;
                 }
 
-                if(!$question['private'] || $survey->user_id == auth()->id()){
                 $analysis[$question->id] = [
                     'question' => $question->question,
                     'type' => 'choice',
                     'total' => count($answers),
                     'results' => $percentages,
                     'private' => false
-                ];}else{
-                    $analysis[$question->id] = [
-                    'question' => $question->question,
-                    'private' => true
-                    ];
-                }
-
+                ];
             }
             else if ($question->type === 'select') {
 
                 $counts = [];
 
+                foreach ($question->options as $option) {
+                    $counts[$option] = 0;
+                }
+
                 foreach ($answers as $answer) {
-                    foreach(explode(',',$answer) as $single_answer){
-                        $counts[$single_answer] = ($counts[$single_answer] ?? 0) + 1;
+                    foreach ($answer as $single_answer) {
+                        if (isset($counts[$single_answer])) {
+                            $counts[$single_answer]++;
+                        }
                     }
                 }
 

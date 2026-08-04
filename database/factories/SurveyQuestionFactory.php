@@ -30,17 +30,19 @@ public function definition(): array
         'question' => fake()->sentence(),
         'type' => $type,
 
+
         // Your database stores options as a string separated by |
         'options' => match ($type) {
-            'choice', 'select' => implode('|', fake()->randomElements([
+            'choice', 'select' => fake()->randomElements([
                 'Option A',
                 'Option B',
                 'Option C',
                 'Option D',
                 'Option E',
                 'Option F',
-            ], random_int(3, 6))),
-            'slider' => '0|10',
+            ], random_int(3, 6)),
+
+            'slider' => ['start' => 0, 'end' => 100],
             default => null,
         },
 

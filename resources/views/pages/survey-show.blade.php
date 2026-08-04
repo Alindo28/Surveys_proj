@@ -62,7 +62,7 @@
                                 </div>
 
                                 <div class="mt-3 space-y-2">
-                                    @foreach (explode('|',$surveyQuestion['options']) as $option)
+                                    @foreach ($surveyQuestion['options'] as $option)
                                         <label class="flex gap-2 items-center">
                                             <input
                                                 {{ $surveyQuestion['required'] ? 'required' : '' }}
@@ -90,12 +90,12 @@
                                 </div>
 
                                 <div class="mt-3 space-y-2">
-                                    @foreach (explode('|',$surveyQuestion['options']) as $option)
+                                    @foreach ($surveyQuestion['options'] as $option)
                                         <label class="flex gap-2 items-center">
                                             <input
-                                                {{ $surveyQuestion['required'] ? 'required' : '' }}
+                                                {{-- {{ $surveyQuestion['required'] ? 'required' : '' }} --}}
                                                 type="checkbox"
-                                                name="answers[{{ $surveyQuestion['id'] }}]"
+                                                name="answers[{{ $surveyQuestion['id'] }}][]"
                                                 class="checkbox"
                                                 value="{{ $option }}"
                                             >
@@ -105,11 +105,12 @@
                                 </div>
                             </div>
 
-                            @elseif($surveyQuestion['type'] == 'slider')
-                            @php
-                                [$min, $max] = explode('|', $surveyQuestion['options']);
-                            @endphp
 
+                        @elseif($surveyQuestion['type'] == 'slider')
+                            @php
+                                $min = $surveyQuestion['options']['start'];
+                                $max = $surveyQuestion['options']['end'];
+                            @endphp
                             <div>
                                 <div class="flex items-center gap-1 mb-2">
                                     <label class="font-bold text-lg">
@@ -122,7 +123,7 @@
                                 </div>
 
                                 <div class="flex items-center gap-4">
-                                    <span>{{ $min }}</span>
+                                    <span>{{ $surveyQuestion['type'] }}</span>
 
                                     <input
                                         id="slider-{{ $surveyQuestion->id }}"

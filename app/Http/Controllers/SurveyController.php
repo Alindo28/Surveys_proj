@@ -72,6 +72,7 @@ class SurveyController extends Controller
     }
 
     public function create(Request $req, $context_id){
+
         $validated = $req->validate(
             [
                 'title' => ['string','required','max:255'],
@@ -92,12 +93,8 @@ class SurveyController extends Controller
                     $question['required'] = false;
             }
 
-            if(isset($question['options'])){
-                $question['options'] = Arr::join($question['options'],'|');
-            }
-
             if($question['type'] === 'slider'){
-                $question['options'] = Arr::join($question['range'],'|');
+                $question['options'] = json_encode(['start' => $question['range'][0], 'end' => $question['range'][1]]);
             }else $question['range'] = null;
         }
 
@@ -144,7 +141,7 @@ class SurveyController extends Controller
     }
 
     public function update(Request $req, $id){
-        $survey = Survey::findOrFail($id);
+        $survey = Survey::find($id);
         if($survey['user_id'] != auth()->id())abort(HttpResponse::HTTP_UNAUTHORIZED);
 
         $validated = $req->validate(
@@ -167,19 +164,17 @@ class SurveyController extends Controller
                     $question['required'] = false;
             }
 
-            if(isset($question['options'])){
-                $question['options'] = Arr::join($question['options'],'|');
-            }
-
             if($question['type'] === 'slider'){
-                $question['options'] = Arr::join($question['range'],'|');
+                $question['options'] = json_encode(['start' => $question['range'][0], 'end' => $question['range'][1]]);
             }else $question['range'] = null;
         }
 
-        $survey = Survey::findOrFail($id);
-        if($survey['user_id'] != auth()->id())abort(HttpResponse::HTTP_UNAUTHORIZED);
+        $survey->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+        ]);
 
-        SurveyQuestion::where(['survey_id' => $survey->id])->delete();
+        SurveyQuestion::where('survey_id', $id)->delete();
 
         foreach($validated['questions'] as &$question){
             unset($question['range']);
@@ -190,6 +185,7 @@ class SurveyController extends Controller
 
         return redirect()->route('survey.view.my');
     }
+
 
     public function delete($id){
         Survey::find($id)->delete();

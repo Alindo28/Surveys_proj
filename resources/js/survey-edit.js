@@ -3,7 +3,7 @@ import { newQuestion } from "./servey-utils";
 let questionsDiv = document.getElementById('questions');
 
 function createQuestion(question){
-    console.log(question['options']);
+    console.log(question);
     filler(question);
 }
 

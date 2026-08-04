@@ -11,6 +11,10 @@ class Response extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'answers' => 'array',
+    ];
+
     public function user(){
         return $this->belongsTo(User::class);
     }

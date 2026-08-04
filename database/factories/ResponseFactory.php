@@ -25,26 +25,25 @@ class ResponseFactory extends Factory
 
         $answers = [];
 
-        foreach($survey['questions'] as $question){
+        foreach($survey->questions as $question){
             if($question['type'] == 'text'){
-                $answers[] = fake()->sentence();
+                $answers[$question['id']] = fake()->sentence();
             }
             else if($question['type'] == 'choice'){
-               $answers[] = fake()->randomElement(explode('|', $question['options']));
+               $answers[$question['id']] = fake()->randomElement($question['options']);
             }
             else if($question['type'] == 'select'){
-                $answers[] = implode(',', fake()->randomElements(explode('|', $question['options']), random_int(1,3))) ;
+                $answers[$question['id']] = fake()->randomElements($question['options'], fake()->numberBetween(1,count($question->options)-1));
             }
             else if($question['type'] == 'slider'){
-                $range = explode('|', $question['options']);
-                $answers[] = fake()->numberBetween($range[0],$range[1]);
+                $answers[$question['id']] = fake()->numberBetween($question['options']['start'],$question['options']['end']);
             }
         }
 
         return [
             'user_id' => User::inRandomOrder()->first()->id,
             'survey_id' => $survey->id,
-            'answers' => implode('|',$answers),
+            'answers' => $answers,
             'duration' => fake()->numberBetween(30,300)
         ];
     }

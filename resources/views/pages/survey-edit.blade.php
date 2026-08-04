@@ -41,7 +41,9 @@
             <!-- Questions -->
             <div id="questions">
                 <script>
+                    @json($survey->questions);
                     questions = @json($survey->questions);
+
                     window.onload = ()=>{
                         for(let i=0; i < questions.length; i++){
                             createQuestion(questions[i]);

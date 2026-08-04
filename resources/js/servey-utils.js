@@ -291,7 +291,7 @@ document.getElementById(`add-options-${cInd}`).addEventListener('click', () => {
 
 console.log(question);
 if(question!=null && (question['type']==='choice' || question['type']==='select'))
-question['options'].split('|').forEach((option)=>{
+question['options'].forEach((option)=>{
     addOption(optionsData, option);
 })
 

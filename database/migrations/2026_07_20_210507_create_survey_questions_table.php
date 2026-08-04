@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('survey_id')->constrained('surveys')->cascadeOnDelete();
             $table->string('question');
             $table->enum('type', ['text', 'choice', 'select', 'slider']);
-            $table->string('options')->nullable();
+            $table->json('options')->nullable();
             $table->boolean('required')->default(false);
             $table->boolean('private')->default(false);
             $table->timestamps();

@@ -169,31 +169,28 @@
 
 
                             @elseif($question['type'] === 'text')
-
-
-
+                                @php
+                                    $qanswers = json_decode($question['answers'], true)
+                                @endphp
                                 <div class="mt-4">
-
 
                                     <h3 class="font-bold mb-3">
                                         Text Responses
                                     </h3>
-
-
 
                                     <div class="collapse collapse-arrow bg-base-200">
 
                                     <input type="checkbox">
 
                                     <div class="collapse-title font-medium">
-                                        View Responses ({{ count($question['answers']) }})
+                                        View Responses ({{ count($qanswers) }})
                                     </div>
 
                                     <div class="collapse-content">
 
                                         <div class="flex flex-col gap-2 mt-2">
 
-                                            @foreach(array_reverse($question['answers']) as $answer)
+                                            @foreach(array_reverse($qanswers) as $answer)
 
                                                 <div class="bg-base-100 rounded p-3">
                                                     {{ $answer }}
@@ -215,6 +212,48 @@
 
                             @elseif($question['type'] === 'slider')
 
+                                @php
+                                    $answers = $question['answers'];
+                                    $average = $answers->count() > 0
+                                        ? round($answers->sum() / $answers->count(), 2)
+                                        : 0;
+
+                                    $minAnswer = $answers->count() > 0
+                                        ? $answers->min()
+                                        : 0;
+
+                                    $maxAnswer = $answers->count() > 0
+                                        ? $answers->max()
+                                        : 0;
+
+                                    // Create distribution groups
+                                    $groupCount = 10;
+
+                                    $step = ($maxAnswer - $minAnswer) > 0
+                                        ? ceil(($maxAnswer - $minAnswer + 1) / $groupCount)
+                                        : 1;
+
+
+                                    $distribution = [];
+
+                                    foreach ($answers as $answer) {
+
+                                        $start = floor(($answer - $minAnswer) / $step) * $step + $minAnswer;
+                                        $end = $start + $step - 1;
+
+                                        $key = $start . '-' . $end;
+
+                                        $distribution[$key] = ($distribution[$key] ?? 0) + 1;
+                                    }
+
+                                    uksort($distribution, function ($a, $b) {
+                                        return (int) explode('-', $a)[0] <=> (int) explode('-', $b)[0];
+                                    });
+
+                                @endphp
+
+
+                                {{-- Statistics --}}
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
 
 
@@ -225,7 +264,7 @@
                                         </div>
 
                                         <div class="stat-value text-primary">
-                                            {{ round(array_sum($question['answers'])/count($question['answers']), 2) }}
+                                            {{ $average }}
                                         </div>
 
                                     </div>
@@ -239,7 +278,7 @@
                                         </div>
 
                                         <div class="stat-value">
-                                            {{ min($question['answers']) }}
+                                            {{ $minAnswer }}
                                         </div>
 
                                     </div>
@@ -253,7 +292,7 @@
                                         </div>
 
                                         <div class="stat-value">
-                                            {{ max($question['answers']) }}
+                                            {{ $maxAnswer }}
                                         </div>
 
                                     </div>
@@ -265,12 +304,11 @@
                                         <div class="stat-title">
                                             Range
                                         </div>
+
                                         <div class="stat-value text-lg">
-
-                                            {{ explode('|',$question['options'])[0] }}
+                                            {{ $question['options']['start'] }}
                                             -
-                                            {{ explode('|',$question['options'])[1] }}
-
+                                            {{ $question['options']['end'] }}
                                         </div>
 
                                     </div>
@@ -280,7 +318,7 @@
 
 
 
-
+                                {{-- Distribution --}}
                                 <div class="mt-6">
 
 
@@ -289,34 +327,27 @@
                                     </h3>
 
 
-                                    @php
-                                        $distribution = array_count_values($question['answers']);
-                                        ksort($distribution);
-                                    @endphp
-                                    @foreach($distribution as $value => $count)
-
+                                    @foreach($distribution as $range => $count)
                                         @php
-
                                             $percentage = $question['total'] > 0
                                                 ? round(($count / $question['total']) * 100, 1)
                                                 : 0;
-
                                         @endphp
 
 
 
-                                        <div class="mb-3">
+                                        <div class="mb-4">
 
 
-                                            <div class="flex justify-between text-sm">
+                                            <div class="flex justify-between text-sm mb-1">
 
                                                 <span>
-                                                    {{ $value }}
+                                                    {{ str_replace('-', ' - ', $range) }}
                                                 </span>
-
 
                                                 <span>
                                                     {{ $percentage }}%
+                                                    ({{ $count }})
                                                 </span>
 
                                             </div>
@@ -336,7 +367,6 @@
 
 
                                 </div>
-
 
 
                             @endif
