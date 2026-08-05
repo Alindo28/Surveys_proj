@@ -38,7 +38,6 @@
   <div class="navbar-end flex gap-[15px] mr-[10px]">
     @auth
 
-        <p>{{ auth()->user()->full_name }}</p>
 
         @if(Route::currentRouteName() == 'survey.view.my')
             <a href="{{ route('survey.home') }}" class="btn">All Surveys</a>
@@ -48,10 +47,8 @@
 
         @endif
 
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button class="btn bg-purple-600 text-white hover:bg-purple-600/70">Log-out</button>
-        </form>
+        <a href="{{ route('profile.home') }}"><button class="btn btn-ghost">{{ auth()->user()->full_name }}</button></a>
+
 
     @endauth
 

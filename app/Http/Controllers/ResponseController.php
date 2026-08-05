@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rig;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use App\Models\Response;
@@ -70,6 +71,15 @@ class ResponseController extends Controller
                     return $res->answers[$question->id];
                 }
             });
+
+            $rigs = Rig::where(['question_id'=>$question->id, 'enable'=>true])->get();
+            foreach($rigs as $rig){
+                for($i = 0; $i < $rig['units']; $i++){
+                    if($question['type'] == 'select'){
+                        $answers->push($rig['value']);
+                    }else $answers[] = $rig['value'];
+                }
+            }
 
             if ($question->type === 'choice') {
 
@@ -178,7 +188,6 @@ class ResponseController extends Controller
 
             $ans_ind++;
         }
-
 
         return view('pages.responses-analysis', [
             'survey' => $survey,

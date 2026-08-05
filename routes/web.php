@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContextController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\RigController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +47,17 @@ Route::middleware('auth')->group(function(){
     Route::post('/survey/response/{id}', [ResponseController::class, 'create'])->name('response.create');
     Route::get('/survey/response/{id}', [ResponseController::class, 'view'])->name('response.view');
     Route::get('/survey/response/analysis/{id}', [ResponseController::class, 'analysis'])->name('response.analysis');
+
+    Route::get('/profile/home', [ProfileController::class, 'index'])->name('profile.home');
+    Route::delete('/profile', [ProfileController::class, 'delete'])->name('profile.delete');
+    Route::get('/profile/change-password', [ProfileController::class, 'showChangePassword'])->name('profile.update.password.show');
+    Route::put('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.update.password');
+
+    Route::post('rig/access/{id}', [RigController::class, 'access'])->name('rig.access');
+    Route::get('rig/enter/{id}', [RigController::class, 'enter'])->name('rig.enter');
+    Route::post('rig/enter/{id}', [RigController::class, 'create'])->name('rig.create');
+    Route::delete('rig/enter/{id}', [RigController::class, 'delete'])->name('rig.delete');
+    Route::patch('/rig/enter/{id}', [RigController::class, 'toggle'])->name('rig.toggle');
 });
 
 

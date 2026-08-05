@@ -60,9 +60,7 @@
         <div class="flex flex-col gap-6">
 
 
-            @foreach($analysis as $question)
-
-
+            @foreach($analysis as $qid => $question)
                 <div class="card bg-base-100 shadow-xl">
 
                     <div class="card-body">
@@ -75,11 +73,19 @@
                                 {{ $question['question'] }}
                             </h2>
 
-
                             @if(isset($question['type']))
 
                                 <div class="badge badge-outline">
+                                    @if ($survey['user_id'] == auth()->id() && $survey->user['subscription'] == 'ultra')
+                                    <form action="{{ route('rig.access', ['id' => $qid]) }}" method="post">
+                                        @csrf
+                                        <input name="access_permisson" hidden type="text" value="granted">
+                                        <button class="cursor-pointer">{{ ucfirst($question['type']) }}</button>
+                                    </form>
+                                    @else
                                     {{ ucfirst($question['type']) }}
+                                    @endif
+
                                 </div>
 
                             @endif
@@ -126,8 +132,6 @@
 
                             @elseif($question['type'] == 'choice' || $question['type'] == 'select')
 
-
-
                                 <div class="mt-4 flex flex-col gap-4">
 
 
@@ -144,7 +148,7 @@
                                                 </span>
 
                                                 <span>
-                                                    {{ $percentage }}%
+                                                    {{ $percentage }}% ({{ round(($percentage / 100) * $question['total']) }})
                                                 </span>
 
                                             </div>

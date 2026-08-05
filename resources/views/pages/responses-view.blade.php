@@ -95,7 +95,11 @@
 
 
                                         <p class="text-base-content/70">
-                                            {{ $answers[$i] ?? 'No answer' }}
+                                            @if(isset($answers[$question['id']]))
+                                            {{ is_array($answers[$question['id']]) ? implode(', ', $answers[$question['id']]) : $answers[$question['id']]}}
+                                            @else
+                                            No answer
+                                            @endif
                                         </p>
 
                                     </div>

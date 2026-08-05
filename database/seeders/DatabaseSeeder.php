@@ -65,11 +65,11 @@ class DatabaseSeeder extends Seeder
         };
 
         $mainR = function() use($makeUsers, $makeSurveys, $makeResponses, $makeTags){
-            // $makeUsers();
+            $makeUsers();
 
-            // for($i = 0; $i < 150; $i++)$makeSurveys();
+            for($i = 0; $i < 150; $i++)$makeSurveys();
 
-            // for($i = 0; $i < 100; $i++)$makeResponses();
+            for($i = 0; $i < 1000; $i++)$makeResponses();
 
             $makeTags(500);
         };

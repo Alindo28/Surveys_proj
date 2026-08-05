@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 
 class UpdateImageUrls extends Command
 {
-    protected $signature = 'update:image-urls';
+    protected $signature = 'update-image-urls';
 
     protected $description = 'Update image URLs';
 
