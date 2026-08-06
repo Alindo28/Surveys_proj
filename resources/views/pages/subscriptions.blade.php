@@ -131,17 +131,25 @@
 
                     @switch(auth()->user()->subscription)
                         @case('free')
+                            <form action="{{ route('profile.subsciptions.purchase') }}" method="post">
+                                @csrf
+                                @method('patch')
+                            <input hidden type="text" name="plan" value="plus">
                             <button class="btn btn-info w-full">
                                 Upgrade
                             </button>
+                            </form>
                             @break
                         @case('plus')
                         <div>
-                        <button
-                            class="btn btn-outline w-full"
-                            >
+                        <form action="{{ route('profile.subsciptions.purchase') }}" method="post">
+                            @csrf
+                            @method('patch')
+                        <input hidden type="text" name="plan" value="plus">
+                        <button class="btn btn-info w-full">
                             Renew
                         </button>
+                        </form>
                         <p class="text-[12px] text-accent mt-2">Expiration: {{ auth()->user()->subscription_expiration->format('M j, Y \a\t g:i A') }}</p>
                         </div>
                         @break
@@ -191,22 +199,35 @@
 
                     @switch(auth()->user()->subscription)
                         @case('free')
+                            <form action="{{ route('profile.subsciptions.purchase') }}" method="post">
+                                @csrf
+                                @method('patch')
+                            <input hidden type="text" name="plan" value="pro">
                             <button class="btn btn-info w-full">
                                 Upgrade
                             </button>
+                            </form>
                             @break
                         @case('plus')
+                            <form action="{{ route('profile.subsciptions.purchase') }}" method="post">
+                                @csrf
+                                @method('patch')
+                            <input hidden type="text" name="plan" value="pro">
                             <button class="btn btn-info w-full">
                                 Upgrade
                             </button>
+                            </form>
                             @break
                         @case('pro')
                         <div>
-                        <button
-                            class="btn btn-outline w-full"
-                            >
-                            Renew
-                        </button>
+                            <form action="{{ route('profile.subsciptions.purchase') }}" method="post">
+                                @csrf
+                                @method('patch')
+                            <input hidden type="text" name="plan" value="pro">
+                            <button class="btn btn-info w-full">
+                                Renew
+                            </button>
+                            </form>
                         <p class="text-[12px] text-accent mt-2">Expiration: {{ auth()->user()->subscription_expiration->format('M j, Y \a\t g:i A') }}</p>
                         </div>
                         @break
@@ -250,27 +271,45 @@
 
                     @switch(auth()->user()->subscription)
                         @case('free')
+                            <form action="{{ route('profile.subsciptions.purchase') }}" method="post">
+                                @csrf
+                                @method('patch')
+                            <input hidden type="text" name="plan" value="ultra">
                             <button class="btn btn-info w-full">
                                 Upgrade
                             </button>
+                            </form>
                             @break
                         @case('plus')
+                            <form action="{{ route('profile.subsciptions.purchase') }}" method="post">
+                                @csrf
+                                @method('patch')
+                            <input hidden type="text" name="plan" value="ultra">
                             <button class="btn btn-info w-full">
                                 Upgrade
                             </button>
+                            </form>
                             @break
                         @case('pro')
+                            <form action="{{ route('profile.subsciptions.purchase') }}" method="post">
+                                @csrf
+                                @method('patch')
+                            <input hidden type="text" name="plan" value="ultra">
                             <button class="btn btn-info w-full">
                                 Upgrade
                             </button>
+                            </form>
                             @break
                         @case('ultra')
                         <div>
-                        <button
-                            class="btn btn-outline w-full"
-                            >
-                            Renew
-                        </button>
+                            <form action="{{ route('profile.subsciptions.purchase') }}" method="post">
+                                @csrf
+                                @method('patch')
+                            <input hidden type="text" name="plan" value="ultra">
+                            <button class="btn btn-info w-full">
+                                Renew
+                            </button>
+                            </form>
                         <p class="text-[12px] text-accent mt-2">Expiration: {{ auth()->user()->subscription_expiration->format('M j, Y \a\t g:i A') }}</p>
                         </div>
                         @break

@@ -55,12 +55,17 @@ class ProfileController extends Controller
         ]);
 
         if($validated['plan'] == auth()->user()->subscription && now() < auth()->user()->subscription_expiration){
-            auth()->user()->subscription_expiration = auth()->user()->subscription_expiration->addWeek();
-            auth()->user()->save();
+            $user = Auth::user();
+            $user->subscription_expiration = $user->subscription_expiration->addWeek();
+            $user->save();
         }
         else{
-            auth()->user()->subscription_expiration = now()->addWeek();
-            auth()->user()->save();
+            $user = Auth::user();
+            $user->subscription = $validated['plan'];
+            $user->subscription_expiration = now()->addWeek();
+            $user->save();
         }
+
+        return redirect()->back();
     }
 }

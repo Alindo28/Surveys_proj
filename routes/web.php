@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/profile/change-password', [ProfileController::class, 'showChangePassword'])->name('profile.update.password.show');
     Route::put('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.update.password');
     Route::get('/profile/subscriptions', [ProfileController::class, 'showSubscription'])->name('profile.subsciptions.show')->middleware('check.subscription');
-    Route::post('/profile/subscriptions/purchase', [ProfileController::class, 'purchase'])->name('profile.subsciptions.purchase')->middleware('check.subscription');
+    Route::patch('/profile/subscriptions/purchase', [ProfileController::class, 'purchase'])->name('profile.subsciptions.purchase')->middleware('check.subscription');
 
 
     Route::post('rig/access/{id}', [RigController::class, 'access'])->name('rig.access')->middleware('check.subscription');
