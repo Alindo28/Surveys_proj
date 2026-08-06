@@ -41,6 +41,9 @@ public function definition(): array
             'pro',
             'ultra'
         ]),
+
+        'subscription_expiration' => now()->addDays(fake()->numberBetween(1,30))
+
     ];
 }
 

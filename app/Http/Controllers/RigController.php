@@ -55,7 +55,8 @@ class RigController extends Controller
             'question_id' => $id,
             'value' => $validated['answers'],
             'units' => $validated['units'],
-            'enable' => $req->boolean('enable')
+            'enable' => $req->boolean('enable'),
+            'user_id' => auth()->id()
         ]);
 
         session([

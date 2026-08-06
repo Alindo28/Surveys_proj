@@ -16,12 +16,19 @@ class SurveyContextFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    protected $user;
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => $this->user ? $this->user->id : User::inRandomOrder()->first(),
             'title' => fake()->sentence(),
             'preview' => fake()->sentences(4, true),
         ];
+    }
+
+    public function user_init($id){
+        $this->user = $id ? User::find($id) : null;
+        return $this;
     }
 }

@@ -17,9 +17,12 @@ class SurveyFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+protected $context;
 public function definition(): array
 {
-    $context = SurveyContext::inRandomOrder()->first();
+    $context = $this->context ? $this->context : SurveyContext::inRandomOrder()->first();
+
     return [
         'context_id' => $context->id,
         'user_id' => $context->user_id,
@@ -33,4 +36,10 @@ public function definition(): array
         ]),
     ];
 }
+
+public function context_init($id){
+    $this->context = $id ? SurveyContext::find($id) : null;
+    return $this;
+}
+
 }

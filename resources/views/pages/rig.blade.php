@@ -254,7 +254,10 @@ fetch(`/rig/enter/${qid}`, {
 })
 .then(response => response.text())
 .then(data => {
-    console.log(data);
+    @if (count($Rigs) > 0)
+        window.location.reload();
+    @endif
+
 });
 
 });

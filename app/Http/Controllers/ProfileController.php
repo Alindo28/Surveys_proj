@@ -44,4 +44,23 @@ class ProfileController extends Controller
 
         return redirect()->route('login');
     }
+
+    public function showSubscription(){
+        return view('pages.subscriptions');
+    }
+
+    public function purchase(Request $req){
+        $validated = $req->validate([
+            'plan' => ['string', 'in:plus,pro,ultra']
+        ]);
+
+        if($validated['plan'] == auth()->user()->subscription && now() < auth()->user()->subscription_expiration){
+            auth()->user()->subscription_expiration = auth()->user()->subscription_expiration->addWeek();
+            auth()->user()->save();
+        }
+        else{
+            auth()->user()->subscription_expiration = now()->addWeek();
+            auth()->user()->save();
+        }
+    }
 }

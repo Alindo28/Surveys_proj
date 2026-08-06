@@ -48,14 +48,17 @@ Route::middleware('auth')->group(function(){
     Route::get('/survey/response/{id}', [ResponseController::class, 'view'])->name('response.view');
     Route::get('/survey/response/analysis/{id}', [ResponseController::class, 'analysis'])->name('response.analysis');
 
-    Route::get('/profile/home', [ProfileController::class, 'index'])->name('profile.home');
+    Route::get('/profile/home', [ProfileController::class, 'index'])->name('profile.home')->middleware('check.subscription');;
     Route::delete('/profile', [ProfileController::class, 'delete'])->name('profile.delete');
     Route::get('/profile/change-password', [ProfileController::class, 'showChangePassword'])->name('profile.update.password.show');
     Route::put('/profile/change-password', [ProfileController::class, 'changePassword'])->name('profile.update.password');
+    Route::get('/profile/subscriptions', [ProfileController::class, 'showSubscription'])->name('profile.subsciptions.show')->middleware('check.subscription');
+    Route::post('/profile/subscriptions/purchase', [ProfileController::class, 'purchase'])->name('profile.subsciptions.purchase')->middleware('check.subscription');
 
-    Route::post('rig/access/{id}', [RigController::class, 'access'])->name('rig.access');
-    Route::get('rig/enter/{id}', [RigController::class, 'enter'])->name('rig.enter');
-    Route::post('rig/enter/{id}', [RigController::class, 'create'])->name('rig.create');
+
+    Route::post('rig/access/{id}', [RigController::class, 'access'])->name('rig.access')->middleware('check.subscription');
+    Route::get('rig/enter/{id}', [RigController::class, 'enter'])->name('rig.enter')->middleware('check.subscription');
+    Route::post('rig/enter/{id}', [RigController::class, 'create'])->name('rig.create')->middleware('check.subscription');
     Route::delete('rig/enter/{id}', [RigController::class, 'delete'])->name('rig.delete');
     Route::patch('/rig/enter/{id}', [RigController::class, 'toggle'])->name('rig.toggle');
 });

@@ -94,9 +94,9 @@
 
         <div class="mt-6 w-full">
 
-            <button class="btn btn-primary w-full">
+            <a href="{{ route('profile.subsciptions.show') }}"><button class="btn btn-primary w-full">
                 Manage Subscription
-            </button>
+            </button></a>
 
         </div>
 

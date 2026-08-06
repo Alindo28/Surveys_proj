@@ -19,9 +19,11 @@ class ResponseFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    protected $survey;
     public function definition(): array
     {
-        $survey = Survey::inRandomOrder()->with('questions')->first();
+        $survey = $this->survey ? $this->survey : Survey::inRandomOrder()->with('questions')->first();
 
         $answers = [];
 
@@ -46,5 +48,11 @@ class ResponseFactory extends Factory
             'answers' => $answers,
             'duration' => fake()->numberBetween(30,300)
         ];
+
+    }
+
+    public function survey_init($id){
+        $this->survey = $id ? Survey::find($id) : null;
+        return $this;
     }
 }
